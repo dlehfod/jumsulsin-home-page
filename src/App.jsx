@@ -309,15 +309,15 @@ function Hero() {
         <motion.span aria-hidden="true" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
           transition={{ delay: STRIP_START, duration: 1, ease }}
           className="block h-px origin-left bg-line" />
-        <div className={wrap + " flex flex-wrap items-center gap-x-5 gap-y-2 py-6"}>
+        <div className={wrap + " flex flex-wrap items-center gap-x-2 gap-y-2 py-6 sm:gap-x-5"}>
           <motion.span initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }}
             transition={{ delay: STRIP_START + 0.2, duration: 0.6, ease }}
-            className="mr-1 text-[13px] font-bold tracking-[0.12em] text-gold">{H.relationsLabel}</motion.span>
+            className="mr-1 w-full text-[13px] font-bold tracking-[0.12em] text-gold sm:w-auto">{H.relationsLabel}</motion.span>
           {H.relations.map((w, i) => (
             <motion.span key={w} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
               transition={{ delay: STRIP_START + 0.45 + i * 0.09, duration: 0.5, ease }}
-              className="flex items-center gap-5 whitespace-nowrap text-[15px] font-semibold text-white/60 sm:text-[16px]">
-              {i > 0 && <span className="h-1 w-1 rounded-full bg-white/25" aria-hidden="true" />}
+              className="flex items-center gap-5 whitespace-nowrap rounded-full border border-white/10 px-3 py-1 text-[14px] font-semibold text-white/65 sm:rounded-none sm:border-0 sm:p-0 sm:text-[16px] sm:text-white/60">
+              {i > 0 && <span className="hidden h-1 w-1 rounded-full bg-white/25 sm:inline-block" aria-hidden="true" />}
               {w}
             </motion.span>
           ))}
@@ -600,23 +600,22 @@ function Refund() {
           </div>
         </div>
         {/* the worry gets struck through, then the answer lands */}
-        <div className="mx-auto mt-28 max-w-[960px] sm:mt-36">
-          <motion.span initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.6 }}
-            className="mr-3 align-baseline text-[clamp(17px,3.6vw,48px)] font-bold tracking-[-0.03em] text-white/70">{R.footer[0]}</motion.span>
-          <span className="relative inline-block">
-            <motion.span initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.7, ease }}
-              className="block text-[clamp(17px,3.6vw,48px)] font-bold tracking-[-0.03em] text-white/40">
-              {R.footer[1]}
-            </motion.span>
-            <motion.span aria-hidden="true" initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true, margin: "-80px" }}
-              transition={{ delay: 0.75, duration: 0.7, ease: [0.65, 0, 0.35, 1] }}
-              className="absolute inset-x-[-6px] top-[54%] h-[3px] origin-left rounded-full bg-gold sm:h-1" />
-          </span>
-          <motion.span initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true, margin: "-80px" }}
-            transition={{ delay: 0.3, duration: 0.6 }}
-            className="ml-3 align-baseline text-[clamp(17px,3.6vw,48px)] font-bold tracking-[-0.03em] text-white/70">{R.footer[2]}</motion.span>
+        <div className="mx-auto mt-20 max-w-[960px] sm:mt-36">
+          <motion.p initial="hide" whileInView="show" viewport={{ once: true, margin: "-60px" }}
+            className="flex flex-nowrap items-center justify-center gap-x-2 whitespace-nowrap text-[clamp(16px,3.6vw,48px)] font-bold leading-none tracking-[-0.03em] sm:gap-x-3">
+            <motion.span variants={{ hide: { opacity: 0 }, show: { opacity: 1, transition: { duration: 0.6 } } }}
+              className="text-white/70">{R.footer[0]}</motion.span>
+            <span className="relative inline-block py-1">
+              <motion.span variants={{ hide: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0, transition: { duration: 0.7, ease } } }}
+                className="block text-white/40">{R.footer[1]}</motion.span>
+              {/* strike line sits on the vertical centre of the words */}
+              <motion.span aria-hidden="true"
+                variants={{ hide: { scaleX: 0 }, show: { scaleX: 1, transition: { delay: 0.75, duration: 0.7, ease: [0.65, 0, 0.35, 1] } } }}
+                className="absolute inset-x-[-4px] top-1/2 h-[2px] origin-left -translate-y-1/2 rounded-full bg-gold sm:h-1" />
+            </span>
+            <motion.span variants={{ hide: { opacity: 0 }, show: { opacity: 1, transition: { delay: 0.3, duration: 0.6 } } }}
+              className="text-white/70">{R.footer[2]}</motion.span>
+          </motion.p>
           <motion.p initial={{ opacity: 0, y: 24, filter: "blur(8px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             viewport={{ once: true, margin: "-80px" }} transition={{ delay: 1.35, duration: 0.8, ease }}
             className="mt-5 whitespace-nowrap text-[clamp(25px,5.8vw,80px)] font-extrabold leading-[1.15] tracking-[-0.045em] sm:mt-7"
