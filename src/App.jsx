@@ -1,0 +1,957 @@
+import { useEffect, useRef, useState } from "react";
+import { motion, MotionConfig, useInView, animate } from "framer-motion";
+import C from "./copy.js";
+
+const L = C.links;
+const wrap = "mx-auto w-full max-w-[1200px] px-4 sm:px-8 lg:px-10";
+const ease = [0.2, 0.7, 0.2, 1];
+
+/* ---------- small helpers ---------- */
+const Html = ({ h, className = "", as: T = "span" }) => (
+  <T className={className} dangerouslySetInnerHTML={{ __html: h }} />
+);
+const Lines = ({ lines, className = "" }) =>
+  lines.map((l, i) => <Html key={i} h={l} className={"block " + className} />);
+
+const Reveal = ({ children, delay = 0, className = "", y = 36 }) => (
+  <motion.div
+    className={className}
+    initial={{ opacity: 0, y }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-60px" }}
+    transition={{ duration: 0.8, delay, ease }}
+  >
+    {children}
+  </motion.div>
+);
+
+const Label = ({ children, className = "" }) => (
+  <p className={"mb-5 text-[14px] font-bold uppercase tracking-[0.18em] text-gold " + className}>{children}</p>
+);
+
+const H2 = ({ lines, className = "" }) => (
+  <h2 className={"text-[clamp(30px,4.4vw,58px)] font-extrabold leading-[1.25] tracking-[-0.03em] " + className}>
+    <Lines lines={lines} />
+  </h2>
+);
+
+function Counter({ to }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const [v, setV] = useState(0);
+  useEffect(() => {
+    if (!inView) return;
+    const c = animate(0, to, { duration: 1.8, ease, onUpdate: (x) => setV(Math.round(x)) });
+    return () => c.stop();
+  }, [inView, to]);
+  return <span ref={ref} className="tabular-nums">{v.toLocaleString()}</span>;
+}
+
+function Marquee({ items, render, dur = 60, reverse = false }) {
+  return (
+    <div className="marquee-wrap overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_5%,#000_95%,transparent)]">
+      <div className={`marquee flex w-max gap-5 pr-5 ${reverse ? "marquee-rev" : ""}`} style={{ "--dur": dur + "s" }}>
+        {[...items, ...items].map((it, i) => render(it, i))}
+      </div>
+    </div>
+  );
+}
+
+/* auto-scrolling row you can grab: mouse drag on PC, finger swipe on phones */
+function DragMarquee({ items, render, speed = 0.45 }) {
+  const ref = useRef(null);
+  const st = useRef({ pos: 0, down: false, startX: 0, startPos: 0, moved: 0, hover: false, touch: false, touchTimer: 0 });
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const s = st.current;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const wrapPos = () => {
+      const half = el.scrollWidth / 2;
+      if (half <= 0) return;
+      if (s.pos >= half) s.pos -= half;
+      if (s.pos < 1) s.pos += half;
+    };
+    let raf;
+    const tick = () => {
+      if (!s.touch) {
+        if (!reduce && !s.down && !s.hover) s.pos += speed;
+        wrapPos();
+        el.scrollLeft = s.pos;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+
+    // phones: native swipe, keep our position in sync
+    const onScroll = () => { if (s.touch) s.pos = el.scrollLeft; };
+    const onTouchStart = () => { s.touch = true; clearTimeout(s.touchTimer); };
+    const onTouchEnd = () => {
+      clearTimeout(s.touchTimer);
+      s.touchTimer = setTimeout(() => { s.pos = el.scrollLeft; wrapPos(); s.touch = false; }, 1600);
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchend", onTouchEnd, { passive: true });
+
+    // PC: mouse drag
+    const onMove = (e) => {
+      if (!s.down) return;
+      const dx = e.clientX - s.startX;
+      s.moved = Math.max(s.moved, Math.abs(dx));
+      s.pos = s.startPos - dx;
+      wrapPos();
+      el.scrollLeft = s.pos;
+    };
+    const onUp = () => { s.down = false; el.classList.remove("cursor-grabbing"); };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(s.touchTimer);
+      el.removeEventListener("scroll", onScroll);
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+  }, [speed]);
+
+  const s = st.current;
+  return (
+    <div ref={ref}
+      onMouseEnter={() => { s.hover = true; }}
+      onMouseLeave={() => { s.hover = false; }}
+      onMouseDown={(e) => { e.preventDefault(); s.down = true; s.moved = 0; s.startX = e.clientX; s.startPos = s.pos; ref.current.classList.add("cursor-grabbing"); }}
+      onClickCapture={(e) => { if (s.moved > 6) { e.preventDefault(); e.stopPropagation(); } }}
+      className="no-scrollbar cursor-grab overflow-x-auto select-none [mask-image:linear-gradient(90deg,transparent,#000_5%,#000_95%,transparent)]">
+      <div className="flex w-max gap-5 pr-5">
+        {[...items, ...items].map((it, i) => render(it, i))}
+      </div>
+    </div>
+  );
+}
+
+const EyeIcon = () => (
+  <svg viewBox="0 0 24 24" className="h-[1em] w-[1em]" fill="none" stroke="currentColor" strokeWidth="2.4" aria-hidden="true">
+    <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" />
+    <circle cx="12" cy="12" r="3" />
+  </svg>
+);
+
+const Arrow = () => <span aria-hidden="true">→</span>;
+
+const btn = "inline-flex items-center justify-center gap-2 rounded-full font-bold transition duration-200 hover:-translate-y-0.5";
+const btnGold = btn + " bg-gold text-ink hover:bg-gold-2 shadow-[0_10px_40px_-10px_rgba(255,197,61,.55)]";
+const btnGhost = btn + " border border-white/25 text-white hover:border-gold hover:text-gold";
+const btnSize = " h-14 px-7 text-[17px]";
+
+/* ---------- header ---------- */
+function Header() {
+  const [solid, setSolid] = useState(false);
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const f = () => setSolid(window.scrollY > 40);
+    f();
+    window.addEventListener("scroll", f, { passive: true });
+    return () => window.removeEventListener("scroll", f);
+  }, []);
+  const items = [...C.nav, { label: C.navCta, href: "#contact" }];
+  return (
+    <header
+      className={`fixed inset-x-0 top-0 z-50 border-b transition-colors duration-300 ${
+        solid || open ? "border-line bg-ink/85 backdrop-blur-xl" : "border-white/10 bg-transparent"
+      }`}
+    >
+      <div className={wrap + " flex h-[72px] items-center justify-between"}>
+        <a href="#top" className="group flex items-center gap-2.5 whitespace-nowrap sm:gap-3" aria-label={C.logo}>
+          <img src={C.logoImg} alt="" width="40" height="40"
+            className="h-9 w-9 shrink-0 rounded-full ring-1 ring-gold/40 transition-transform duration-500 group-hover:scale-105 sm:h-10 sm:w-10" />
+          <span className="text-[15px] font-extrabold tracking-[-0.03em] text-white sm:text-[18px]"
+            dangerouslySetInnerHTML={{ __html: C.logo.replace("100%", '<span class="text-gold">100%</span>') }} />
+        </a>
+        <nav className="hidden items-center gap-9 text-[15px] font-medium text-white/60 md:flex lg:gap-11">
+          {C.nav.map((n) => (
+            <a key={n.href} href={n.href} {...(n.href.startsWith("http") ? { target: "_blank", rel: "noopener" } : {})}
+              className="relative py-2 transition-colors hover:text-white after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-gold after:transition-transform after:duration-300 hover:after:scale-x-100">
+              {n.label}
+            </a>
+          ))}
+          <a href="#contact" className="ml-2 rounded-full border border-white/20 px-5 py-2 text-[14px] font-semibold text-white transition hover:border-white hover:bg-white hover:text-ink">{C.navCta}</a>
+        </nav>
+        <button
+          type="button"
+          className="flex h-11 w-11 flex-col items-center justify-center gap-1.5 md:hidden"
+          onClick={() => setOpen(!open)}
+          aria-label="메뉴 열기"
+          aria-expanded={open}
+        >
+          <span className={`h-0.5 w-6 bg-white transition ${open ? "translate-y-2 rotate-45" : ""}`} />
+          <span className={`h-0.5 w-6 bg-white transition ${open ? "opacity-0" : ""}`} />
+          <span className={`h-0.5 w-6 bg-white transition ${open ? "-translate-y-2 -rotate-45" : ""}`} />
+        </button>
+      </div>
+      {open && (
+        <div className="border-t border-line md:hidden">
+          <div className={wrap + " flex flex-col py-2"}>
+            {items.map((n) => (
+              <a key={n.href + n.label} href={n.href} onClick={() => setOpen(false)} {...(n.href.startsWith("http") ? { target: "_blank", rel: "noopener" } : {})}
+                 className="border-b border-line py-4 text-lg font-bold last:border-0">{n.label}</a>
+            ))}
+          </div>
+        </div>
+      )}
+    </header>
+  );
+}
+
+/* ---------- 1. hero ---------- */
+const TITLE_START = 0.25;   // 첫 줄 시작 (초)
+const LINE_GAP = 0.38;      // 줄 사이 간격
+const CHAR_GAP = 0.035;     // 글자 사이 간격
+const SUB_START = 1.85;     // 환불 문장 시작
+const STRIP_START = 3.2;    // 맨 아래 상담 분야 줄 시작
+
+/* splits "<em>a</em> b" into segments, then words, then letters.
+   Words stay unbreakable so Korean line wrapping still works on phones. */
+function HeroLine({ html, start }) {
+  const segs = [];
+  html.split(/(<em>.*?<\/em>)/).forEach((p) => {
+    if (!p) return;
+    const m = p.match(/^<em>(.*)<\/em>$/);
+    segs.push({ text: m ? m[1] : p, em: !!m });
+  });
+  let n = 0;
+  return (
+    <span className="block pb-1" aria-hidden="true">
+      {segs.map((s, si) =>
+        s.text.split(/(\s+)/).map((w, wi) => {
+          if (!w) return null;
+          if (/^\s+$/.test(w)) return <span key={si + "-" + wi}> </span>;
+          return (
+            <span key={si + "-" + wi} className={"inline-block whitespace-nowrap " + (s.em ? "text-gold" : "")}>
+              {[...w].map((ch, ci) => {
+                const d = start + n++ * CHAR_GAP;
+                return (
+                  <motion.span key={ci} className="inline-block"
+                    initial={{ opacity: 0, y: "0.45em", filter: "blur(10px)" }}
+                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    transition={{ delay: d, duration: 0.65, ease }}>
+                    {ch}
+                  </motion.span>
+                );
+              })}
+            </span>
+          );
+        })
+      )}
+    </span>
+  );
+}
+
+function Hero() {
+  const H = C.hero;
+  const fade = (d) => ({ initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 }, transition: { delay: d, duration: 0.7, ease } });
+  return (
+    <section id="top" className="grain relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(800px_600px_at_78%_50%,rgba(255,255,255,.045),transparent_62%),radial-gradient(700px_500px_at_8%_25%,rgba(40,110,170,.14),transparent_60%)]" />
+
+      <div className={wrap + " relative z-10 grid min-h-[100svh] items-center gap-14 pb-48 pt-[112px] sm:pb-36 lg:grid-cols-[1.2fr_0.8fr] lg:gap-10"}>
+        {/* text */}
+        <div>
+          <h1 aria-label={H.title.map((l) => l.replace(/<[^>]+>/g, "")).join(" ")}
+            className="text-[clamp(36px,4.3vw,62px)] font-extrabold leading-[1.17] tracking-[-0.04em]">
+            {H.title.map((l, i) => (
+              <HeroLine key={i} html={l} start={TITLE_START + i * LINE_GAP} />
+            ))}
+          </h1>
+
+          {/* gold rule draws in after the title lands */}
+          <motion.span aria-hidden="true" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
+            transition={{ delay: SUB_START - 0.25, duration: 0.7, ease }}
+            className="mt-9 block h-[3px] w-20 origin-left rounded-full bg-gold" />
+
+          <div className="mt-7 text-[clamp(18px,1.6vw,22px)] leading-[1.7]">
+            <motion.p initial={{ opacity: 0, y: 14, filter: "blur(6px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{ delay: SUB_START, duration: 0.7, ease }} className="text-white/80">
+              {H.sub[0]}
+            </motion.p>
+            <motion.p initial={{ opacity: 0, y: 14, filter: "blur(6px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{ delay: SUB_START + 0.45, duration: 0.7, ease }} className="font-bold text-white">
+              <span className="relative inline-block">
+                {/* highlighter sweep */}
+                <motion.span aria-hidden="true" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
+                  transition={{ delay: SUB_START + 0.95, duration: 0.8, ease: [0.65, 0, 0.35, 1] }}
+                  className="absolute inset-x-[-4px] bottom-[2px] h-[42%] origin-left rounded-sm bg-gold/35" />
+                <span className="relative">{H.sub[1]}</span>
+              </span>
+            </motion.p>
+          </div>
+        </div>
+
+        {/* photo card — lives in the same grid as the text, so it never drifts */}
+        <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3, duration: 1, ease }}
+          className="relative mx-auto w-full max-w-[460px] lg:max-w-[540px] lg:justify-self-end">
+          {/* soft neutral light behind the photo, no frame */}
+          <span className="absolute inset-[8%] rounded-full bg-white/[0.06] blur-3xl" aria-hidden="true" />
+          {/* edges dissolve into the dark background */}
+          <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] [mask-image:linear-gradient(to_bottom,#000_62%,transparent_100%)]">
+            <img src={H.photo} alt="점술신 상담사" className="h-full w-full object-cover object-[50%_20%]" />
+          </div>
+
+        </motion.div>
+      </div>
+
+      {/* bottom strip: relation words appear one by one once, then stay */}
+      <div className="absolute inset-x-0 bottom-0 z-10">
+        <motion.span aria-hidden="true" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
+          transition={{ delay: STRIP_START, duration: 1, ease }}
+          className="block h-px origin-left bg-line" />
+        <div className={wrap + " flex flex-wrap items-center gap-x-5 gap-y-2 py-6"}>
+          <motion.span initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: STRIP_START + 0.2, duration: 0.6, ease }}
+            className="mr-1 text-[13px] font-bold tracking-[0.12em] text-gold">{H.relationsLabel}</motion.span>
+          {H.relations.map((w, i) => (
+            <motion.span key={w} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: STRIP_START + 0.45 + i * 0.09, duration: 0.5, ease }}
+              className="flex items-center gap-5 whitespace-nowrap text-[15px] font-semibold text-white/60 sm:text-[16px]">
+              {i > 0 && <span className="h-1 w-1 rounded-full bg-white/25" aria-hidden="true" />}
+              {w}
+            </motion.span>
+          ))}
+        </div>
+        <motion.span aria-hidden="true" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
+          transition={{ delay: STRIP_START + 0.15, duration: 1, ease }}
+          className="block h-px origin-right bg-line" />
+      </div>
+    </section>
+  );
+}
+
+/* ---------- 1-1. proof numbers ---------- */
+function EvidenceCard({ kind, img, onZoom, caption, sub }) {
+  return (
+    <figure className="flex flex-col">
+      <button type="button" onClick={() => onZoom(img)}
+        className="group relative block overflow-hidden rounded-2xl bg-white text-left shadow-[0_30px_80px_-24px_rgba(0,0,0,.85)] ring-1 ring-white/10 transition duration-300 hover:-translate-y-1">
+        {kind === "kmong" ? (
+          <span className="flex items-center justify-between border-b border-black/5 bg-[#f7f7f9] px-5 py-3">
+            <span className="text-[13px] font-extrabold text-[#222]">크몽 · 서비스 후기</span>
+            <span className="text-[13px] font-bold text-[#f5a623]">★★★★★ <span className="text-[#222]">5.0</span></span>
+          </span>
+        ) : (
+          <span className="flex items-center gap-2 bg-[#eceef1] px-4 py-3">
+            <span className="h-3 w-3 rounded-full bg-[#ff5f57]" /><span className="h-3 w-3 rounded-full bg-[#febc2e]" /><span className="h-3 w-3 rounded-full bg-[#28c840]" />
+            <span className="ml-3 flex-1 truncate rounded-md bg-white px-3 py-1 text-xs text-[#667]">cafe.naver.com · 상담후기 게시판</span>
+          </span>
+        )}
+        <span className="relative block h-[clamp(320px,34vw,460px)] overflow-hidden">
+          <img src={img} alt={caption} loading="lazy" className="w-full object-cover object-top transition duration-700 group-hover:scale-[1.02]" />
+          <span className="absolute inset-x-0 bottom-0 h-28 bg-linear-to-t from-white via-white/80 to-transparent" />
+          <span className="absolute bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-ink/85 px-4 py-2 text-[13px] font-bold text-white">원본 크게 보기 ⤢</span>
+        </span>
+      </button>
+      <figcaption className="mt-5 text-left">
+        <p className="flex items-center gap-2 text-[17px] font-extrabold"><span className="grid h-6 w-6 place-items-center rounded-full bg-gold text-[12px] text-ink">✓</span>{caption}</p>
+        <p className="mt-1 pl-8 text-[15px] text-mute">{sub}</p>
+      </figcaption>
+    </figure>
+  );
+}
+
+function Proof({ onZoom }) {
+  const P = C.proof, K = C.cafe;
+  return (
+    <section id="cafe" className="relative overflow-hidden bg-navy py-[clamp(110px,14vw,180px)]">
+      <div className="absolute inset-0 bg-[radial-gradient(700px_400px_at_50%_20%,rgba(255,197,61,.09),transparent_70%)]" />
+      <div className={wrap + " relative"}>
+        <div className="text-center">
+          <Reveal><H2 lines={P.title} /></Reveal>
+          <div className="mx-auto mt-14 grid max-w-[760px] grid-cols-2 divide-x divide-white/15">
+            {P.stats.map((s, i) => (
+              <Reveal key={s.label} delay={0.15 + i * 0.1} className="px-4">
+                <p className="text-[clamp(38px,7.4vw,104px)] font-extrabold leading-none tracking-[-0.045em] text-gold">
+                  <Counter to={s.num} />{s.suffix}
+                </p>
+                <p className="mt-4 text-[clamp(15px,1.6vw,20px)] font-bold text-white/85">{s.label}</p>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+        <div className="mx-auto mt-16 grid max-w-[1040px] gap-10 md:grid-cols-2 md:gap-8">
+          <Reveal delay={0.1}>
+            <EvidenceCard kind="kmong" img={C.cafe.kmong.img} onZoom={onZoom} caption={P.evidence[0].caption} sub={P.evidence[0].sub} />
+          </Reveal>
+          <Reveal delay={0.2}>
+            <EvidenceCard kind="cafe" img={C.cafe.listImg} onZoom={onZoom} caption={P.evidence[1].caption} sub={P.evidence[1].sub} />
+          </Reveal>
+        </div>
+
+        {/* cafe long-form reviews */}
+        <div className="mx-auto mt-28 max-w-[1040px]">
+          <Reveal className="text-center">
+            <h3 className="text-[clamp(26px,3.2vw,40px)] font-extrabold leading-[1.3] tracking-[-0.03em]"><Lines lines={K.title} /></h3>
+          </Reveal>
+          <ul className="mx-auto mt-10 max-w-[860px] overflow-hidden rounded-2xl border border-line bg-ink/40">
+            {K.items.map((c, i) => (
+              <Reveal key={i} delay={i * 0.05} y={16}>
+                <li className="border-b border-line last:border-b-0">
+                  <a href={c.href} target="_blank" rel="noopener"
+                    className="group flex h-[68px] items-center gap-4 px-5 transition hover:bg-white/[0.03] sm:gap-5 sm:px-7">
+                    <span className="hidden shrink-0 rounded-full bg-gold/12 px-3 py-1 text-[12px] font-bold text-gold sm:inline">{c.tag}</span>
+                    <span className="min-w-0 flex-1 truncate text-[15px] font-bold tracking-[-0.02em] sm:text-[18px]">{c.title}</span>
+                    <span className="shrink-0 text-mute transition group-hover:translate-x-1 group-hover:text-gold"><Arrow /></span>
+                  </a>
+                </li>
+              </Reveal>
+            ))}
+          </ul>
+          <Reveal className="mx-auto mt-6 max-w-[860px]">
+            <div className="flex flex-col items-center gap-7 rounded-2xl border border-dashed border-white/20 px-6 py-9 text-center sm:px-9">
+              <p className="text-[clamp(19px,2.2vw,27px)] font-bold leading-[1.5]"><Lines lines={K.more} /></p>
+              <div className="flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row">
+                <a href={L.cafeReviews} target="_blank" rel="noopener" className={btnGhost + " h-12 px-6 text-[16px]"}>{K.moreCta} <Arrow /></a>
+                <a href={L.kmong} target="_blank" rel="noopener" className={btnGhost + " h-12 px-6 text-[16px]"}>{K.kmong.cta} <Arrow /></a>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+
+        <Reveal delay={0.1}>
+          <div className="mx-auto mt-24 max-w-[760px] text-center">
+            <span className="mx-auto block h-12 w-px bg-linear-to-b from-transparent to-gold/60" aria-hidden="true" />
+            <p className="mt-8 text-[clamp(24px,3vw,38px)] font-extrabold leading-[1.4] tracking-[-0.03em]"><Lines lines={P.guarantee} /></p>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- 1-2. reactions: kakao captures + view cards ---------- */
+function Views({ onZoom }) {
+  const V = C.views, K = C.kakao;
+  return (
+    <section id="kakao" className="py-[clamp(100px,12vw,160px)]">
+      <div className={wrap + " text-center"}>
+        <Reveal delay={0.05}>
+          <p className="text-[clamp(18px,1.9vw,24px)] font-medium tracking-[0.02em] text-white/50">{V.title[0]}</p>
+          <span className="mx-auto mt-6 block h-8 w-px bg-white/20" aria-hidden="true" />
+          <h2 className="mt-6 text-[clamp(34px,5vw,66px)] font-extrabold leading-[1.2] tracking-[-0.04em]"
+            dangerouslySetInnerHTML={{ __html: V.title[1] }} />
+        </Reveal>
+      </div>
+
+      <Reveal delay={0.1} className="mt-16">
+        <DragMarquee items={K.items} render={(k, i) => (
+          <button key={i} type="button" onClick={() => onZoom(k.img)}
+            className="group w-[230px] shrink-0 overflow-hidden rounded-[22px] bg-panel text-left ring-1 ring-white/10 transition hover:-translate-y-1.5 sm:w-[270px]">
+            <span className="block aspect-[9/13] overflow-hidden">
+              <img src={k.img} alt={k.quote} loading="lazy" draggable={false} className="pointer-events-none h-full w-full object-cover object-top transition duration-500 group-hover:scale-105" />
+            </span>
+          </button>
+        )} />
+      </Reveal>
+
+    </section>
+  );
+}
+
+/* ---------- 2. what I read ---------- */
+/* radial map: "그 사람의 속마음" in the centre, the six readings around it */
+function MindMap({ labels, active }) {
+  const count = labels.length;
+  const cx = 200, cy = 200, R = 150, inner = 74;
+  const nodes = Array.from({ length: count }, (_, i) => {
+    const a = (-90 + i * (360 / count)) * (Math.PI / 180);
+    return { x: cx + R * Math.cos(a), y: cy + R * Math.sin(a), lx: cx + inner * Math.cos(a), ly: cy + inner * Math.sin(a) };
+  });
+  return (
+    <svg viewBox="0 0 400 400" className="h-auto w-full" role="img" aria-label="상대의 속마음을 둘러싼 여섯 가지 마음">
+      <circle cx={cx} cy={cy} r="188" fill="none" stroke="rgba(255,255,255,.06)" />
+      <g className="spin-slow">
+        <circle cx={cx} cy={cy} r={R} fill="none" stroke="rgba(255,197,61,.28)" strokeDasharray="2 7" />
+      </g>
+      <circle cx={cx} cy={cy} r="112" fill="none" stroke="rgba(255,255,255,.05)" />
+
+      {nodes.map((n, i) => (
+        <line key={"l" + i} x1={n.lx} y1={n.ly} x2={n.x} y2={n.y}
+          stroke={active === i ? "rgba(255,197,61,.8)" : "rgba(255,255,255,.1)"} strokeWidth={active === i ? 1.5 : 1}
+          style={{ transition: "stroke .4s" }} />
+      ))}
+
+      <circle cx={cx} cy={cy} r={inner} fill="rgba(255,197,61,.06)" stroke="rgba(255,197,61,.35)" />
+      <text x={cx} y={cy - 8} textAnchor="middle" fill="rgba(255,255,255,.55)" fontSize="13" fontWeight="600">그 사람의</text>
+      <text x={cx} y={cy + 18} textAnchor="middle" fill="#fff" fontSize="23" fontWeight="800">속마음</text>
+
+      {nodes.map((n, i) => {
+        const on = active === i;
+        return (
+          <g key={"n" + i}>
+            <circle cx={n.x} cy={n.y} r="40" fill="rgba(255,197,61,.16)" style={{ opacity: on ? 1 : 0, transition: "opacity .4s" }} />
+            <circle cx={n.x} cy={n.y} r="31" fill={on ? "#ffc53d" : "#0f2233"} stroke={on ? "#ffc53d" : "rgba(255,255,255,.18)"}
+              style={{ transition: "fill .4s, stroke .4s" }} />
+            <text x={n.x} y={n.y + 4.5} textAnchor="middle" fontSize={labels[i].length > 3 ? 11.5 : 13} fontWeight="800" letterSpacing="-0.3"
+              fill={on ? "#05080f" : "rgba(255,255,255,.7)"} style={{ transition: "fill .4s" }}>
+              {labels[i]}
+            </text>
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+function Read() {
+  const R = C.read;
+  const [node, setNode] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setNode((n) => (n + 1) % R.nodes.length), 1800);
+    return () => clearInterval(t);
+  }, [R.nodes.length]);
+  return (
+    <section id="read" className="py-[clamp(100px,12vw,160px)]">
+      <Reveal className={wrap}>
+        <h2 className="whitespace-nowrap text-center text-[clamp(25px,4.6vw,62px)] font-extrabold leading-[1.25] tracking-[-0.035em]"
+          dangerouslySetInnerHTML={{ __html: R.title }} />
+        <span className="mx-auto mt-8 block h-[3px] w-14 rounded-full bg-gold" aria-hidden="true" />
+      </Reveal>
+      <div className={wrap + " mt-14 grid items-center gap-12 lg:mt-24 lg:grid-cols-[1fr_1.15fr] lg:gap-16"}>
+        <div>
+          <Reveal delay={0.15}>
+            <div className="mx-auto w-full max-w-[340px] lg:max-w-[440px]">
+              <MindMap labels={R.nodes} active={node} />
+            </div>
+          </Reveal>
+        </div>
+        <ol>
+          {R.items.map((t, i) => (
+            <Reveal key={i} delay={i * 0.05}>
+              <li className="group flex cursor-default items-baseline gap-6 border-b border-line py-5 first:border-t sm:gap-8 sm:py-6">
+                <span className="w-10 shrink-0 text-[17px] font-extrabold text-gold">{String(i + 1).padStart(2, "0")}</span>
+                <span className="text-[clamp(18px,1.6vw,23px)] font-medium tracking-[-0.02em] text-white/70 transition duration-300 group-hover:translate-x-2 group-hover:font-bold group-hover:text-white">{t}</span>
+              </li>
+            </Reveal>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- 3. statement ---------- */
+function Waste() {
+  const W = C.waste;
+  return (
+    <section className="relative overflow-hidden py-[clamp(130px,16vw,220px)] text-center">
+      <div className="absolute inset-0 bg-[radial-gradient(600px_300px_at_50%_60%,rgba(255,197,61,.07),transparent_70%)]" />
+      <div className={wrap + " relative"}>
+        <Reveal><p className="text-[clamp(19px,2vw,26px)] font-semibold text-mute">{W.small}</p></Reveal>
+        <Reveal delay={0.1}>
+          <h2 className="mt-6 text-[clamp(42px,7vw,100px)] font-extrabold leading-[1.15] tracking-[-0.04em]"><Lines lines={W.big} /></h2>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- 4. refund ---------- */
+function Refund() {
+  const R = C.refund;
+  return (
+    <section id="refund" className="bg-navy py-[clamp(100px,12vw,160px)]">
+      <div className={wrap + " text-center"}>
+        <Reveal>
+          <div className="mb-9 flex flex-col items-center">
+            <span className="pl-[0.4em] text-[clamp(17px,1.7vw,21px)] font-bold tracking-[0.4em] text-gold">{R.label}</span>
+            <span className="mt-4 h-px w-10 bg-gold/70" aria-hidden="true" />
+          </div>
+          <H2 lines={R.title} />
+        </Reveal>
+        <div className="mx-auto mt-16 max-w-[880px]">
+          <Reveal>
+            <div className="rounded-3xl border border-line bg-panel px-6 py-7 sm:px-10">
+              <p className="text-[clamp(19px,2vw,25px)] font-bold">{R.start}</p>
+            </div>
+          </Reveal>
+          <div className="relative mx-auto hidden h-14 w-1/2 md:block" aria-hidden="true">
+            <span className="absolute left-1/2 top-0 h-7 w-px bg-white/20" />
+            <span className="absolute inset-x-0 top-7 h-px bg-white/20" />
+            <span className="absolute left-0 top-7 h-7 w-px bg-white/20" />
+            <span className="absolute right-0 top-7 h-7 w-px bg-white/20" />
+          </div>
+          <div className="mt-4 grid gap-4 text-left md:mt-0 md:grid-cols-2 md:gap-6">
+            <Reveal>
+              <div className="h-full rounded-3xl border border-bad/25 bg-bad/[0.05] p-8">
+                <span className="rounded-full bg-bad/15 px-3 py-1 text-[13px] font-bold text-bad">{R.fail.tag}</span>
+                <p className="mt-5 text-[clamp(21px,2.2vw,27px)] font-extrabold leading-snug">{R.fail.title}</p>
+                <p className="mt-2 text-mute">{R.fail.desc}</p>
+              </div>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <div className="h-full rounded-3xl border border-gold/50 bg-gold/[0.07] p-8 shadow-[0_0_80px_-30px_rgba(255,197,61,.5)]">
+                <span className="rounded-full bg-gold/20 px-3 py-1 text-[13px] font-bold text-gold">{R.pass.tag}</span>
+                <p className="mt-5 text-[clamp(21px,2.2vw,27px)] font-extrabold leading-snug">{R.pass.title}</p>
+                <p className="mt-2 text-mute">{R.pass.desc}</p>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+        {/* the worry gets struck through, then the answer lands */}
+        <div className="mx-auto mt-28 max-w-[960px] sm:mt-36">
+          <motion.span initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6 }}
+            className="mr-3 align-baseline text-[clamp(17px,3.6vw,48px)] font-bold tracking-[-0.03em] text-white/70">{R.footer[0]}</motion.span>
+          <span className="relative inline-block">
+            <motion.span initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.7, ease }}
+              className="block text-[clamp(17px,3.6vw,48px)] font-bold tracking-[-0.03em] text-white/40">
+              {R.footer[1]}
+            </motion.span>
+            <motion.span aria-hidden="true" initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true, margin: "-80px" }}
+              transition={{ delay: 0.75, duration: 0.7, ease: [0.65, 0, 0.35, 1] }}
+              className="absolute inset-x-[-6px] top-[54%] h-[3px] origin-left rounded-full bg-gold sm:h-1" />
+          </span>
+          <motion.span initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true, margin: "-80px" }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+            className="ml-3 align-baseline text-[clamp(17px,3.6vw,48px)] font-bold tracking-[-0.03em] text-white/70">{R.footer[2]}</motion.span>
+          <motion.p initial={{ opacity: 0, y: 24, filter: "blur(8px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            viewport={{ once: true, margin: "-80px" }} transition={{ delay: 1.35, duration: 0.8, ease }}
+            className="mt-5 whitespace-nowrap text-[clamp(25px,5.8vw,80px)] font-extrabold leading-[1.15] tracking-[-0.045em] sm:mt-7"
+            dangerouslySetInnerHTML={{ __html: R.footer[3] }} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- 6. fields + stats ---------- */
+function Fields() {
+  const F = C.fields;
+  return (
+    <section className="bg-navy py-[clamp(100px,12vw,160px)]">
+      <div className={wrap}>
+        <Reveal><H2 lines={F.title} /></Reveal>
+        <div className="mt-14 grid overflow-hidden rounded-3xl border border-line sm:grid-cols-2 lg:grid-cols-3">
+          {F.items.map((f, i) => (
+            <Reveal key={i} delay={(i % 3) * 0.07} className="border-line [&:not(:last-child)]:border-b sm:[&:nth-child(odd)]:border-r lg:[&:nth-child(odd)]:border-r-0 lg:[&:not(:nth-child(3n))]:border-r lg:[&:nth-child(n+4)]:border-b-0">
+              <div className="group h-full p-8 transition hover:bg-white/[0.03] sm:p-10">
+                <span className="text-[56px] font-extrabold leading-none text-transparent [-webkit-text-stroke:1px_rgba(255,197,61,.55)] transition group-hover:text-gold">{String(i + 1).padStart(2, "0")}</span>
+                <h3 className="mt-6 text-[clamp(22px,2.2vw,28px)] font-extrabold tracking-tight">{f.name}</h3>
+                <p className="mt-2 text-mute">{f.desc}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <Reveal><p className="mt-8 text-center text-mute">🔒 {F.note}</p></Reveal>
+      </div>
+    </section>
+  );
+}
+
+function Stats() {
+  return (
+    <section className="border-y border-line py-[clamp(70px,9vw,110px)]">
+      <div className={wrap + " grid gap-10 text-center sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-line"}>
+        {C.stats.map((s) => (
+          <Reveal key={s.label}>
+            <p className="text-[clamp(52px,6.4vw,92px)] font-extrabold leading-none tracking-[-0.04em] text-gold"><Counter to={s.num} />{s.suffix}</p>
+            <p className="mt-3 text-[clamp(15px,1.5vw,19px)] font-semibold text-mute">{s.label}</p>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ---------- 9. compare ---------- */
+function Compare() {
+  const P = C.compare;
+  return (
+    <section className="py-[clamp(100px,12vw,160px)]">
+      <div className={wrap}>
+        <Reveal className="text-center">
+          <h2 className="text-[clamp(28px,4.4vw,58px)] font-extrabold leading-[1.25] tracking-[-0.03em] sm:whitespace-nowrap"
+            dangerouslySetInnerHTML={{ __html: P.title.join(" ") }} />
+        </Reveal>
+        <div className="mx-auto mt-14 grid max-w-[1000px] gap-5 md:grid-cols-2">
+          <Reveal>
+            <div className="h-full rounded-3xl border border-line bg-ink/50 p-8 sm:p-10">
+              <h3 className="border-b border-line pb-5 text-xl font-bold text-mute">{P.othersName}</h3>
+              <ul>{P.others.map((t) => (
+                <li key={t} className="flex items-start gap-4 border-b border-line py-5 text-[clamp(17px,1.6vw,20px)] font-semibold text-mute last:border-0">
+                  <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-bad/15 text-sm font-extrabold text-bad">✕</span>{t}
+                </li>))}
+              </ul>
+            </div>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <div className="h-full rounded-3xl border border-gold/50 bg-[linear-gradient(160deg,rgba(255,197,61,.13),rgba(15,34,51,.9)_55%)] p-8 shadow-[0_0_90px_-30px_rgba(255,197,61,.45)] sm:p-10">
+              <h3 className="flex items-center gap-2 border-b border-gold/25 pb-5 text-xl font-extrabold text-gold">{P.mineName}</h3>
+              <ul>{P.mine.map((t) => (
+                <li key={t} className="flex items-start gap-4 border-b border-white/10 py-5 text-[clamp(17px,1.6vw,20px)] font-bold last:border-0">
+                  <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gold text-sm font-extrabold text-ink">✓</span>{t}
+                </li>))}
+              </ul>
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- 10. versus ---------- */
+function Versus() {
+  const V = C.versus;
+  return (
+    <section className="bg-navy py-[clamp(100px,12vw,160px)]">
+      <div className={wrap + " text-center"}>
+        <Reveal><H2 lines={V.title} /></Reveal>
+        <div className="mx-auto mt-14 flex max-w-[1000px] flex-col gap-6 md:gap-4">
+          {V.pairs.map((p, i) => (
+            <Reveal key={i} delay={i * 0.08}>
+              <div className="grid items-center gap-2 md:grid-cols-[1fr_auto_1fr] md:gap-5">
+                <div className="rounded-2xl bg-panel/70 px-6 py-6 text-[clamp(17px,1.7vw,21px)] font-bold text-white/40 line-through decoration-bad/60 md:text-right">{p[0]}</div>
+                <span className="text-lg font-black tracking-[0.08em] text-gold">VS</span>
+                <div className="rounded-2xl border border-gold/35 bg-gold/[0.09] px-6 py-6 text-[clamp(17px,1.7vw,21px)] font-bold md:text-left">✓ {p[1]}</div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- 11. profile ---------- */
+function Profile() {
+  const P = C.profile;
+  return (
+    <section id="profile" className="light bg-[#f3eee5] py-[clamp(100px,12vw,160px)] text-[#14131c]">
+      <div className={wrap + " grid items-center gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20"}>
+        <Reveal>
+          <div className="relative mx-auto max-w-[460px]">
+            <span className="absolute -inset-3 rounded-[34px] border border-[#c49a3c]/50" aria-hidden="true" />
+            <img src={P.photo} alt={P.name} className="relative aspect-[4/5] w-full rounded-[28px] object-cover object-top shadow-[0_40px_80px_-30px_rgba(20,19,28,.45)]" />
+          </div>
+        </Reveal>
+        <div>
+          <Reveal>
+            <blockquote className="border-l-4 border-[#c49a3c] pl-5 text-[clamp(22px,2.4vw,30px)] font-extrabold leading-snug tracking-[-0.02em]">“{P.quote}”</blockquote>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <ul className="mt-10 border-t border-black/10">
+              {P.timeline.map((t) => (
+                <li key={t.text} className="border-b border-black/10 py-4 text-[17px] font-semibold">{t.text}</li>
+              ))}
+            </ul>
+          </Reveal>
+          <Reveal delay={0.25}>
+            <div className="mt-12 flex flex-col gap-2.5">
+              {[{ href: L.mission, t: P.cta }, { href: L.damage, t: P.cta2 }].map((r) => (
+                <a key={r.t} href={r.href} target="_blank" rel="noopener"
+                  className="group flex h-[68px] items-center justify-between gap-4 rounded-2xl bg-[#14131c] pl-5 pr-3 text-white transition duration-300 hover:bg-black sm:pl-7">
+                  <span className="flex min-w-0 items-center gap-4">
+                    <span className="hidden shrink-0 text-[12px] font-bold tracking-[0.18em] text-gold/80 sm:inline">읽어보기</span>
+                    <span className="hidden h-4 w-px shrink-0 bg-white/15 sm:inline-block" aria-hidden="true" />
+                    <span className="truncate whitespace-nowrap text-[15px] font-bold tracking-[-0.02em] sm:text-[17px]">{r.t}</span>
+                  </span>
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl text-[16px] text-white/60 transition group-hover:bg-gold group-hover:text-ink" aria-hidden="true">→</span>
+                </a>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- 12. refuse ---------- */
+function Refuse() {
+  const X = C.refuse;
+  return (
+    <section className="bg-black py-[clamp(100px,12vw,160px)] text-center">
+      <div className={wrap}>
+        <Reveal><p className="inline-block rounded-full border border-bad/40 px-5 py-2 text-[15px] font-extrabold tracking-[0.1em] text-bad">⚠ {X.label}</p></Reveal>
+        <Reveal delay={0.05}><h2 className="mt-7 text-[clamp(42px,6.4vw,88px)] font-extrabold tracking-[-0.04em]">{X.title}</h2></Reveal>
+        <Reveal delay={0.1}><p className="mt-6 text-[clamp(20px,2.3vw,29px)] font-bold leading-[1.5] text-white/85"><Lines lines={X.desc} /></p></Reveal>
+        <Reveal delay={0.15}><p className="mt-12 text-mute">{X.sub}</p></Reveal>
+        <ol className="mx-auto mt-7 flex max-w-[720px] flex-col gap-3 text-left">
+          {X.items.map((t, i) => (
+            <Reveal key={i} delay={0.15 + i * 0.07}>
+              <li className="flex items-center gap-5 rounded-2xl border border-line bg-white/[0.02] px-6 py-5 text-[clamp(17px,1.7vw,20px)] font-bold">
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-bad/15 font-extrabold text-bad">{i + 1}</span>{t}
+              </li>
+            </Reveal>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- 13. contact ---------- */
+function Contact() {
+  const Z = C.final;
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    try { await navigator.clipboard.writeText(C.kakaoId); setCopied(true); setTimeout(() => setCopied(false), 1800); } catch { /* ignore */ }
+  };
+  return (
+    <section id="contact" className="relative overflow-hidden py-[clamp(110px,13vw,170px)] text-center">
+      <div className="absolute inset-0 bg-[radial-gradient(900px_500px_at_50%_0%,rgba(255,197,61,.07),transparent_65%)]" />
+      <div className={wrap + " relative"}>
+        <Reveal><h2 className="text-[clamp(42px,6.4vw,88px)] font-extrabold leading-[1.15] tracking-[-0.04em]"><Lines lines={Z.title} /></h2></Reveal>
+        <Reveal delay={0.15}>
+          <div className="mx-auto mt-14 flex max-w-[760px] flex-col items-stretch gap-6 rounded-[28px] border border-white/10 bg-white/[0.03] p-6 text-left backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between sm:p-8">
+            <div className="flex items-center gap-4">
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-kakao text-[13px] font-black text-ink" aria-hidden="true">TALK</span>
+              <div>
+                <p className="text-[13px] font-semibold text-white/45">카카오톡 ID</p>
+                <p className="flex items-center gap-3 text-[24px] font-extrabold tracking-tight sm:text-[26px]">
+                  {C.kakaoId}
+                  <button type="button" onClick={copy} className="rounded-full border border-white/15 px-3 py-1 text-[12px] font-bold text-white/60 transition hover:border-white/40 hover:text-white">
+                    {copied ? "복사됨" : "복사"}
+                  </button>
+                </p>
+                <p className="mt-1 text-[13px] text-white/40">{Z.desc}</p>
+              </div>
+            </div>
+            <a href={L.kakao} onClick={openKakao} className={btn + " h-14 shrink-0 bg-white px-7 text-[16px] text-ink hover:bg-gold"}>{Z.cta} <Arrow /></a>
+          </div>
+        </Reveal>
+        <Reveal delay={0.2}>
+          <a href={L.cafe} target="_blank" rel="noopener"
+            className="group mx-auto mt-8 inline-flex items-center gap-3 text-[15px] text-white/55 transition hover:text-white sm:text-[16px]">
+            <span className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-[#03c75a] text-[12px] font-black text-white" aria-hidden="true">N</span>
+            <span>
+              {Z.cafeLead}{" "}
+              <span className="font-bold text-white/85 underline decoration-white/25 underline-offset-[6px] transition group-hover:decoration-[#03c75a]">{Z.cafeMain}</span>
+            </span>
+            <span className="transition group-hover:translate-x-1" aria-hidden="true">→</span>
+          </a>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="border-t border-line pb-32 pt-12 text-sm text-white/40 md:pb-12">
+      <div className={wrap + " flex flex-col gap-4"}>
+        <p className="flex items-center gap-2 text-base font-bold text-white/60">{C.brand}</p>
+        <p className="flex flex-col gap-1 leading-relaxed sm:flex-row sm:flex-wrap sm:gap-x-5">{C.footer.rows.map((r) => <span key={r}>{r}</span>)}</p>
+        <p>{C.footer.copyright}</p>
+      </div>
+    </footer>
+  );
+}
+
+/* floating consult button: appears after the hero, follows the scroll */
+function FloatingCta() {
+  // always visible: slides in shortly after the page opens and stays to the end
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setShow(true), 1200);
+    return () => clearTimeout(t);
+  }, []);
+  return (
+    <a href={L.kakao} onClick={openKakao} aria-label={C.mobileBar}
+      className={`fixed bottom-4 left-4 right-4 z-40 flex h-14 items-center justify-center gap-3 rounded-full border border-white/10 bg-ink/80 pl-2 pr-6 text-[16px] font-bold text-white shadow-[0_16px_50px_-10px_rgba(0,0,0,.8)] backdrop-blur-xl transition duration-500 hover:border-white/30 md:bottom-7 md:left-auto md:right-7 md:justify-start ${
+        show ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-6 opacity-0"
+      }`}>
+      <span className="grid h-10 w-10 place-items-center rounded-full bg-kakao text-[10px] font-black text-ink" aria-hidden="true">TALK</span>
+      {C.mobileBar}
+      <span className="text-white/50" aria-hidden="true">→</span>
+    </a>
+  );
+}
+
+/* Kakao consult: phones follow the friend-add link; PCs get a QR window instead */
+const isDesktop = () =>
+  typeof window !== "undefined" && window.matchMedia("(hover: hover) and (pointer: fine)").matches && window.innerWidth >= 768;
+function openKakao(e) {
+  if (!isDesktop()) return; // phone: let the link open KakaoTalk
+  e.preventDefault();
+  window.dispatchEvent(new CustomEvent("open-kakao"));
+}
+
+function KakaoModal() {
+  const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  useEffect(() => {
+    const on = () => setOpen(true);
+    const key = (e) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("open-kakao", on);
+    window.addEventListener("keydown", key);
+    return () => { window.removeEventListener("open-kakao", on); window.removeEventListener("keydown", key); };
+  }, []);
+  const copy = async () => {
+    try { await navigator.clipboard.writeText(C.kakaoId); setCopied(true); setTimeout(() => setCopied(false), 1800); } catch { /* ignore */ }
+  };
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-[110] grid place-items-center bg-black/75 p-5 backdrop-blur-sm" onClick={() => setOpen(false)} role="dialog" aria-modal="true" aria-label="카카오톡 상담 문의">
+      <motion.div initial={{ opacity: 0, y: 16, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.35, ease }}
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-[380px] rounded-[28px] border border-white/10 bg-[#0d1726] p-8 text-center shadow-[0_40px_100px_-20px_rgba(0,0,0,.9)]">
+        <button type="button" onClick={() => setOpen(false)} className="absolute right-4 top-3 text-3xl leading-none text-white/40 transition hover:text-white" aria-label="닫기">×</button>
+        <p className="text-[13px] font-bold tracking-[0.2em] text-gold">카카오톡 상담</p>
+        <p className="mt-3 text-[20px] font-extrabold tracking-tight">폰 카메라로 찍으면<br />바로 친구추가돼요</p>
+        <img src={C.links.kakaoQr} alt="카카오톡 친구추가 QR 코드" className="mx-auto mt-6 w-[220px] rounded-2xl bg-white" />
+        <div className="mt-6 flex items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3">
+          <span className="text-[13px] text-white/45">카카오톡 ID</span>
+          <span className="text-[18px] font-extrabold">{C.kakaoId}</span>
+          <button type="button" onClick={copy} className="rounded-full border border-white/15 px-3 py-1 text-[12px] font-bold text-white/70 transition hover:border-white/40 hover:text-white">{copied ? "복사됨" : "복사"}</button>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+function Lightbox({ src, onClose }) {
+  useEffect(() => {
+    const k = (e) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", k);
+    return () => window.removeEventListener("keydown", k);
+  }, [onClose]);
+  if (!src) return null;
+  return (
+    <div className="fixed inset-0 z-[100] grid place-items-center bg-black/90 p-5" onClick={onClose} role="dialog" aria-modal="true">
+      <img src={src} alt="" className="max-h-[92vh] max-w-[94vw] rounded-xl" />
+      <button type="button" className="absolute right-5 top-4 text-4xl text-white" aria-label="닫기">×</button>
+    </div>
+  );
+}
+
+export default function App() {
+  const [zoom, setZoom] = useState(null);
+  return (
+    <MotionConfig reducedMotion="user">
+      <Header />
+      <main>
+        <Hero />
+        <Read />
+        <Refund />
+        <Waste />
+        <Proof onZoom={setZoom} />
+        <Views onZoom={setZoom} />
+        <Fields />
+        <Compare />
+        <Versus />
+        <Profile />
+        <Refuse />
+        <Contact />
+      </main>
+      <Footer />
+      <FloatingCta />
+      <Lightbox src={zoom} onClose={() => setZoom(null)} />
+      <KakaoModal />
+    </MotionConfig>
+  );
+}
