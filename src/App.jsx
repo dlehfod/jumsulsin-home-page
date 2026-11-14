@@ -570,35 +570,26 @@ function Refund() {
           </div>
           <H2 lines={R.title} />
         </Reveal>
-        <div className="mx-auto mt-16 max-w-[880px]">
-          <Reveal>
-            <div className="rounded-3xl border border-line bg-panel px-6 py-7 sm:px-10">
-              <p className="text-[clamp(17px,2vw,25px)] font-bold">{R.start}</p>
+        {/* one clean card: step on top, two outcomes side by side */}
+        <Reveal className="mx-auto mt-14 max-w-[820px] sm:mt-16">
+          <div className="overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.025]">
+            <div className="flex items-center justify-center gap-3 border-b border-white/10 px-5 py-5 sm:py-6">
+              <span className="text-[11px] font-bold tracking-[0.25em] text-gold sm:text-[12px]">STEP 01</span>
+              <span className="h-3 w-px bg-white/20" aria-hidden="true" />
+              <span className="text-[clamp(13px,1.6vw,18px)] font-semibold text-white/85">{R.start}</span>
             </div>
-          </Reveal>
-          <div className="relative mx-auto hidden h-14 w-1/2 md:block" aria-hidden="true">
-            <span className="absolute left-1/2 top-0 h-7 w-px bg-white/20" />
-            <span className="absolute inset-x-0 top-7 h-px bg-white/20" />
-            <span className="absolute left-0 top-7 h-7 w-px bg-white/20" />
-            <span className="absolute right-0 top-7 h-7 w-px bg-white/20" />
+            <div className="grid grid-cols-2 divide-x divide-white/10">
+              {[{ o: R.fail, gold: false }, { o: R.pass, gold: true }].map(({ o, gold }) => (
+                <div key={o.tag} className={"px-4 py-8 text-center sm:px-8 sm:py-12 " + (gold ? "bg-gold/[0.04]" : "")}>
+                  <p className={"text-[12px] font-semibold sm:text-[14px] " + (gold ? "text-gold/80" : "text-white/45")}>{o.tag}</p>
+                  <p className={"mt-3 text-[clamp(24px,3.6vw,40px)] font-extrabold tracking-[-0.03em] " + (gold ? "text-gold" : "text-white")}>{o.big}</p>
+                  <p className="mt-3 text-[12px] leading-relaxed text-white/50 sm:text-[15px]">{o.small}</p>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="mt-4 grid gap-4 text-left md:mt-0 md:grid-cols-2 md:gap-6">
-            <Reveal>
-              <div className="h-full rounded-3xl border border-bad/25 bg-bad/[0.05] p-8">
-                <span className="rounded-full bg-bad/15 px-3 py-1 text-[13px] font-bold text-bad">{R.fail.tag}</span>
-                <p className="mt-5 text-[clamp(19px,2.2vw,27px)] font-extrabold leading-snug">{R.fail.title}</p>
-                <p className="mt-2 text-mute">{R.fail.desc}</p>
-              </div>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <div className="h-full rounded-3xl border border-gold/50 bg-gold/[0.07] p-8 shadow-[0_0_80px_-30px_rgba(255,197,61,.5)]">
-                <span className="rounded-full bg-gold/20 px-3 py-1 text-[13px] font-bold text-gold">{R.pass.tag}</span>
-                <p className="mt-5 text-[clamp(19px,2.2vw,27px)] font-extrabold leading-snug">{R.pass.title}</p>
-                <p className="mt-2 text-mute">{R.pass.desc}</p>
-              </div>
-            </Reveal>
-          </div>
-        </div>
+        </Reveal>
+
         {/* the worry gets struck through, then the answer lands */}
         <div className="mx-auto mt-20 max-w-[960px] sm:mt-36">
           <motion.p initial="hide" whileInView="show" viewport={{ once: true, margin: "-60px" }}
