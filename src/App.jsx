@@ -257,7 +257,7 @@ function Hero() {
     <section id="top" className="grain relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(800px_600px_at_78%_50%,rgba(255,255,255,.045),transparent_62%),radial-gradient(700px_500px_at_8%_25%,rgba(40,110,170,.14),transparent_60%)]" />
 
-      <div className={wrap + " relative z-10 grid min-h-[100svh] items-center gap-14 pb-20 pt-[112px] sm:pb-24 lg:grid-cols-[1.2fr_0.8fr] lg:gap-10"}>
+      <div className={wrap + " relative z-10 grid min-h-[100svh] content-center items-center gap-6 pb-20 pt-[96px] sm:gap-14 sm:pb-24 sm:pt-[112px] lg:grid-cols-[1.2fr_0.8fr] lg:content-normal lg:gap-10"}>
         {/* text */}
         <div>
           <h1 aria-label={H.title.map((l) => l.replace(/<[^>]+>/g, "")).join(" ")}
@@ -290,7 +290,7 @@ function Hero() {
 
         {/* photo card — lives in the same grid as the text, so it never drifts */}
         <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3, duration: 1, ease }}
-          className="relative mx-auto w-full max-w-[460px] lg:max-w-[540px] lg:justify-self-end">
+          className="relative order-first mx-auto w-full max-w-[74vw] sm:max-w-[460px] lg:order-none lg:max-w-[540px] lg:justify-self-end">
           {/* warm glow behind the artwork */}
           <span className="absolute inset-[14%] rounded-full bg-gold/[0.10] blur-3xl" aria-hidden="true" />
           {/* mood artwork: its black edges dissolve into the page */}
