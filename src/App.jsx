@@ -568,12 +568,9 @@ function Refund() {
           <motion.p initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }} transition={{ duration: 0.7, ease }}
             className="text-[clamp(16px,2vw,22px)] font-medium tracking-[-0.01em] text-white/55">{R.footer[0]}</motion.p>
-          <motion.span initial={{ scaleY: 0 }} whileInView={{ scaleY: 1 }} viewport={{ once: true, margin: "-60px" }}
-            transition={{ delay: 0.5, duration: 0.5, ease }} aria-hidden="true"
-            className="mx-auto my-5 block h-8 w-px origin-top bg-linear-to-b from-white/25 to-gold/60 sm:my-6 sm:h-10" />
           <motion.p initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }} transition={{ delay: 0.9, duration: 0.8, ease }}
-            className="text-[clamp(26px,3.8vw,46px)] font-semibold leading-[1.3] tracking-[-0.025em] text-white/90"
+            viewport={{ once: true, margin: "-60px" }} transition={{ delay: 0.6, duration: 0.8, ease }}
+            className="mt-4 sm:mt-5 text-[clamp(26px,3.8vw,46px)] font-semibold leading-[1.3] tracking-[-0.025em] text-white/90"
             dangerouslySetInnerHTML={{ __html: R.footer[1] }} />
         </div>
       </div>
@@ -773,39 +770,38 @@ function Contact() {
       <div className={wrap + " relative"}>
         <Reveal><h2 className="text-[clamp(34px,6.4vw,88px)] font-extrabold leading-[1.15] tracking-[-0.04em]"><Lines lines={Z.title} /></h2></Reveal>
         <Reveal delay={0.15}>
-          <div className="mt-12 flex flex-col items-center sm:mt-14">
-            {/* thin gold outline button, fills on hover */}
-            <a href={L.kakao} onClick={openKakao}
-              className="group inline-flex h-14 items-center gap-3 rounded-full border border-gold/60 px-10 text-[16px] font-semibold tracking-[-0.01em] text-gold transition duration-300 hover:bg-gold hover:text-ink sm:h-[60px] sm:px-12 sm:text-[17px]">
-              {Z.cta}
-              <span className="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">→</span>
-            </a>
-            {/* ID: hairlines either side, click the ID to copy */}
-            <div className="mt-7 flex items-center gap-4 text-[13px] sm:text-[14px]">
-              <span className="h-px w-8 bg-white/15 sm:w-12" aria-hidden="true" />
-              <span className="text-white/40">카카오톡 ID</span>
-              <button type="button" onClick={copy} title="ID 복사"
-                className="group inline-flex items-center gap-1.5 font-semibold tracking-[0.02em] text-white/80 transition hover:text-white">
-                {C.kakaoId}
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"
-                  className="text-white/35 transition group-hover:text-gold">
-                  {copied ? <path d="M5 12l5 5L20 7" /> : <><rect x="9" y="9" width="11" height="11" rx="2" /><path d="M5 15V5a2 2 0 0 1 2-2h10" /></>}
-                </svg>
-              </button>
-              <span className="h-px w-8 bg-white/15 sm:w-12" aria-hidden="true" />
+          {/* two contact routes, framed by hairlines and split by a divider */}
+          <div className="mx-auto mt-12 grid max-w-[760px] border-y border-white/10 sm:mt-16 sm:grid-cols-2">
+            <div className="flex flex-col items-center px-4 py-9 sm:py-11">
+              <a href={L.kakao} onClick={openKakao}
+                className="group inline-flex h-[52px] items-center gap-3 rounded-full border border-gold/60 px-9 text-[15px] font-semibold tracking-[-0.01em] text-gold transition duration-300 hover:bg-gold hover:text-ink sm:h-14 sm:text-[16px]">
+                {Z.cta}
+                <span className="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">→</span>
+              </a>
+              <div className="mt-5 flex items-center gap-2.5 text-[13px] sm:text-[14px]">
+                <span className="text-white/40">카카오톡 ID</span>
+                <button type="button" onClick={copy} title="ID 복사"
+                  className="group inline-flex items-center gap-1.5 font-semibold tracking-[0.02em] text-white/80 transition hover:text-white">
+                  {C.kakaoId}
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"
+                    className="text-white/35 transition group-hover:text-gold">
+                    {copied ? <path d="M5 12l5 5L20 7" /> : <><rect x="9" y="9" width="11" height="11" rx="2" /><path d="M5 15V5a2 2 0 0 1 2-2h10" /></>}
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div className="flex flex-col items-center justify-center border-t border-white/10 px-4 py-9 sm:border-l sm:border-t-0 sm:py-11">
+              <a href={L.cafe} target="_blank" rel="noopener"
+                className="group inline-flex items-center gap-3 text-[15px] text-white/55 transition hover:text-white sm:text-[16px]">
+                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-[#03c75a] text-[12px] font-black text-white" aria-hidden="true">N</span>
+                <span className="flex flex-col items-start leading-snug">
+                  <span className="text-[13px] text-white/45 sm:text-[14px]">{Z.cafeLead}</span>
+                  <span className="font-bold text-white/85 underline decoration-white/25 underline-offset-[6px] transition group-hover:decoration-[#03c75a]">{Z.cafeMain}</span>
+                </span>
+                <span className="transition group-hover:translate-x-1" aria-hidden="true">→</span>
+              </a>
             </div>
           </div>
-        </Reveal>
-        <Reveal delay={0.2}>
-          <a href={L.cafe} target="_blank" rel="noopener"
-            className="group mx-auto mt-12 inline-flex items-center gap-3 text-[15px] text-white/55 transition hover:text-white sm:text-[16px]">
-            <span className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-[#03c75a] text-[12px] font-black text-white" aria-hidden="true">N</span>
-            <span>
-              {Z.cafeLead}{" "}
-              <span className="font-bold text-white/85 underline decoration-white/25 underline-offset-[6px] transition group-hover:decoration-[#03c75a]">{Z.cafeMain}</span>
-            </span>
-            <span className="transition group-hover:translate-x-1" aria-hidden="true">→</span>
-          </a>
         </Reveal>
       </div>
     </section>
