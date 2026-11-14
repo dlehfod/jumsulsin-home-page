@@ -584,7 +584,7 @@ function Fields() {
   return (
     <section className="bg-navy py-[clamp(72px,12vw,160px)]">
       <div className={wrap}>
-        <Reveal><H2 lines={F.title} /></Reveal>
+        <Reveal><H2 lines={F.title} className="text-center" /></Reveal>
         <div className="mx-auto mt-10 grid max-w-[1000px] grid-cols-2 gap-2 sm:mt-12 sm:gap-3 lg:grid-cols-3">
           {F.items.map((f, i) => (
             <Reveal key={i} delay={(i % 3) * 0.06} y={14}>
