@@ -280,13 +280,10 @@ function Hero() {
             <motion.p initial={{ opacity: 0, y: 14, filter: "blur(6px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               transition={{ delay: SUB_START + 0.45, duration: 0.7, ease }} className="font-bold text-white">
               {H.sub[1]}
-              <span className="relative inline-block">
-                {/* gold underline draws under the refund words only */}
-                <motion.span aria-hidden="true" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
-                  transition={{ delay: SUB_START + 0.95, duration: 0.7, ease: [0.65, 0, 0.35, 1] }}
-                  className="absolute inset-x-0 -bottom-[3px] h-[2px] origin-left rounded-full bg-gold" />
-                <span className="relative">{H.subMark}</span>
-              </span>
+              {/* refund words: gold, fades in a beat later */}
+              <motion.span initial={{ color: "#ffffff" }} animate={{ color: "#ffc53d" }}
+                transition={{ delay: SUB_START + 0.95, duration: 0.6 }}
+                className="font-extrabold">{H.subMark}</motion.span>
             </motion.p>
           </div>
         </div>
