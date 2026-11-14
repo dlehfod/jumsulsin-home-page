@@ -552,8 +552,12 @@ function Refund() {
                 (i === R.steps.length - 1 ? "border-gold/25 bg-gold/[0.035]" : "border-white/10 bg-white/[0.025]")}>
                 <span className={"absolute left-1/2 top-0 grid h-8 w-8 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border bg-ink text-[11px] font-bold " +
                   (i === R.steps.length - 1 ? "border-gold/50 text-gold" : "border-white/20 text-white/70")}>{st.n}</span>
-                <p className="text-[clamp(22px,3.2vw,34px)] font-extrabold leading-[1.35] tracking-[-0.03em]"><Lines lines={st.lines} /></p>
-                {st.note && <p className="mt-3 text-[13px] text-white/50 sm:text-[15px]">{st.note}</p>}
+                {/* lighter two-level type so the steps read differently from the heavy H2 above */}
+                <p className="text-[clamp(14px,1.5vw,17px)] font-medium tracking-[-0.01em] text-white/55"
+                  dangerouslySetInnerHTML={{ __html: st.lines[0] }} />
+                <p className="mt-2 text-[clamp(20px,2.6vw,28px)] font-semibold leading-[1.35] tracking-[-0.02em] text-white/90 [&_em]:font-bold"
+                  dangerouslySetInnerHTML={{ __html: st.lines[1] }} />
+                {st.note && <p className="mt-3 text-[12px] text-white/40 sm:text-[13px]">{st.note}</p>}
               </div>
             </div>
           ))}
