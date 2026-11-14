@@ -262,7 +262,7 @@ function Hero() {
         {/* text */}
         <div>
           <h1 aria-label={H.title.map((l) => l.replace(/<[^>]+>/g, "")).join(" ")}
-            className="text-[clamp(29px,4.3vw,62px)] font-extrabold leading-[1.17] tracking-[-0.04em]">
+            className="text-[clamp(29px,4.3vw,62px)] font-extrabold leading-[1.4] tracking-[-0.04em]">
             {H.title.map((l, i) => (
               <HeroLine key={i} html={l} start={TITLE_START + i * LINE_GAP} />
             ))}
@@ -280,12 +280,13 @@ function Hero() {
             </motion.p>
             <motion.p initial={{ opacity: 0, y: 14, filter: "blur(6px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               transition={{ delay: SUB_START + 0.45, duration: 0.7, ease }} className="font-bold text-white">
+              {H.sub[1]}
               <span className="relative inline-block">
-                {/* highlighter sweep */}
+                {/* gold underline draws under the refund words only */}
                 <motion.span aria-hidden="true" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
-                  transition={{ delay: SUB_START + 0.95, duration: 0.8, ease: [0.65, 0, 0.35, 1] }}
-                  className="absolute inset-x-[-4px] bottom-[2px] h-[42%] origin-left rounded-sm bg-gold/35" />
-                <span className="relative">{H.sub[1]}</span>
+                  transition={{ delay: SUB_START + 0.95, duration: 0.7, ease: [0.65, 0, 0.35, 1] }}
+                  className="absolute inset-x-0 -bottom-[3px] h-[2px] origin-left rounded-full bg-gold" />
+                <span className="relative">{H.subMark}</span>
               </span>
             </motion.p>
           </div>
