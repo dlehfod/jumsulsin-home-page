@@ -637,23 +637,23 @@ function Compare() {
           <h2 className="text-[clamp(22px,4.4vw,58px)] font-extrabold leading-[1.25] tracking-[-0.03em] sm:whitespace-nowrap"
             dangerouslySetInnerHTML={{ __html: P.title.join(" ") }} />
         </Reveal>
-        <div className="mx-auto mt-14 grid max-w-[1000px] gap-5 md:grid-cols-2">
+        <div className="mx-auto mt-10 grid max-w-[900px] gap-3 sm:mt-12 md:grid-cols-2 md:gap-4">
           <Reveal>
-            <div className="h-full rounded-3xl border border-line bg-ink/50 p-8 sm:p-10">
-              <h3 className="border-b border-line pb-5 text-xl font-bold text-mute">{P.othersName}</h3>
+            <div className="h-full rounded-2xl border border-line bg-ink/50 px-5 py-5 sm:px-7 sm:py-6">
+              <h3 className="border-b border-line pb-3 text-[15px] font-bold text-mute sm:text-[16px]">{P.othersName}</h3>
               <ul>{P.others.map((t) => (
-                <li key={t} className="flex items-start gap-4 border-b border-line py-5 text-[clamp(15px,1.6vw,20px)] font-semibold text-mute last:border-0">
-                  <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-bad/15 text-sm font-extrabold text-bad">✕</span>{t}
+                <li key={t} className="flex items-center gap-3 border-b border-line py-3 text-[clamp(14px,1.35vw,17px)] font-semibold text-mute last:border-0 last:pb-0">
+                  <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-bad/15 text-[10px] font-extrabold text-bad">✕</span>{t}
                 </li>))}
               </ul>
             </div>
           </Reveal>
           <Reveal delay={0.1}>
-            <div className="h-full rounded-3xl border border-gold/50 bg-[linear-gradient(160deg,rgba(255,197,61,.13),rgba(15,34,51,.9)_55%)] p-8 shadow-[0_0_90px_-30px_rgba(255,197,61,.45)] sm:p-10">
-              <h3 className="flex items-center gap-2 border-b border-gold/25 pb-5 text-xl font-extrabold text-gold">{P.mineName}</h3>
+            <div className="h-full rounded-2xl border border-gold/50 bg-[linear-gradient(160deg,rgba(255,197,61,.13),rgba(15,34,51,.9)_55%)] px-5 py-5 shadow-[0_0_70px_-30px_rgba(255,197,61,.45)] sm:px-7 sm:py-6">
+              <h3 className="flex items-center gap-2 border-b border-gold/25 pb-3 text-[15px] font-extrabold text-gold sm:text-[16px]">{P.mineName}</h3>
               <ul>{P.mine.map((t) => (
-                <li key={t} className="flex items-start gap-4 border-b border-white/10 py-5 text-[clamp(15px,1.6vw,20px)] font-bold last:border-0">
-                  <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gold text-sm font-extrabold text-ink">✓</span>{t}
+                <li key={t} className="flex items-center gap-3 border-b border-white/10 py-3 text-[clamp(14px,1.35vw,17px)] font-bold last:border-0 last:pb-0">
+                  <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-gold text-[10px] font-extrabold text-ink">✓</span>{t}
                 </li>))}
               </ul>
             </div>
