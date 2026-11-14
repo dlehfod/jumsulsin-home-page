@@ -212,7 +212,6 @@ const TITLE_START = 0.25;   // 첫 줄 시작 (초)
 const LINE_GAP = 0.38;      // 줄 사이 간격
 const CHAR_GAP = 0.035;     // 글자 사이 간격
 const SUB_START = 1.85;     // 환불 문장 시작
-const STRIP_START = 3.2;    // 맨 아래 상담 분야 줄 시작
 
 /* splits "<em>a</em> b" into segments, then words, then letters.
    Words stay unbreakable so Korean line wrapping still works on phones. */
@@ -258,7 +257,7 @@ function Hero() {
     <section id="top" className="grain relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(800px_600px_at_78%_50%,rgba(255,255,255,.045),transparent_62%),radial-gradient(700px_500px_at_8%_25%,rgba(40,110,170,.14),transparent_60%)]" />
 
-      <div className={wrap + " relative z-10 grid min-h-[100svh] items-center gap-14 pb-48 pt-[112px] sm:pb-36 lg:grid-cols-[1.2fr_0.8fr] lg:gap-10"}>
+      <div className={wrap + " relative z-10 grid min-h-[100svh] items-center gap-14 pb-20 pt-[112px] sm:pb-24 lg:grid-cols-[1.2fr_0.8fr] lg:gap-10"}>
         {/* text */}
         <div>
           <h1 aria-label={H.title.map((l) => l.replace(/<[^>]+>/g, "")).join(" ")}
@@ -305,28 +304,6 @@ function Hero() {
         </motion.div>
       </div>
 
-      {/* bottom strip: relation words appear one by one once, then stay */}
-      <div className="absolute inset-x-0 bottom-0 z-10">
-        <motion.span aria-hidden="true" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
-          transition={{ delay: STRIP_START, duration: 1, ease }}
-          className="block h-px origin-left bg-line" />
-        <div className={wrap + " flex flex-wrap items-center gap-x-2 gap-y-2 py-6 sm:gap-x-5"}>
-          <motion.span initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: STRIP_START + 0.2, duration: 0.6, ease }}
-            className="mr-1 w-full text-[13px] font-bold tracking-[0.12em] text-gold sm:w-auto">{H.relationsLabel}</motion.span>
-          {H.relations.map((w, i) => (
-            <motion.span key={w} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: STRIP_START + 0.45 + i * 0.09, duration: 0.5, ease }}
-              className="flex items-center gap-5 whitespace-nowrap rounded-full border border-white/10 px-3 py-1 text-[14px] font-semibold text-white/65 sm:rounded-none sm:border-0 sm:p-0 sm:text-[16px] sm:text-white/60">
-              {i > 0 && <span className="hidden h-1 w-1 rounded-full bg-white/25 sm:inline-block" aria-hidden="true" />}
-              {w}
-            </motion.span>
-          ))}
-        </div>
-        <motion.span aria-hidden="true" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
-          transition={{ delay: STRIP_START + 0.15, duration: 1, ease }}
-          className="block h-px origin-right bg-line" />
-      </div>
     </section>
   );
 }
