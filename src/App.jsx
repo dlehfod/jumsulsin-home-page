@@ -596,18 +596,20 @@ function Fields() {
     <section className="bg-navy py-[clamp(72px,12vw,160px)]">
       <div className={wrap}>
         <Reveal><H2 lines={F.title} /></Reveal>
-        <div className="mt-14 grid overflow-hidden rounded-3xl border border-line sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mx-auto mt-10 grid max-w-[1000px] grid-cols-2 gap-2 sm:mt-12 sm:gap-3 lg:grid-cols-3">
           {F.items.map((f, i) => (
-            <Reveal key={i} delay={(i % 3) * 0.07} className="border-line [&:not(:last-child)]:border-b sm:[&:nth-child(odd)]:border-r lg:[&:nth-child(odd)]:border-r-0 lg:[&:not(:nth-child(3n))]:border-r lg:[&:nth-child(n+4)]:border-b-0">
-              <div className="group h-full p-8 transition hover:bg-white/[0.03] sm:p-10">
-                <span className="text-[56px] font-extrabold leading-none text-transparent [-webkit-text-stroke:1px_rgba(255,197,61,.55)] transition group-hover:text-gold">{String(i + 1).padStart(2, "0")}</span>
-                <h3 className="mt-6 text-[clamp(20px,2.2vw,28px)] font-extrabold tracking-tight">{f.name}</h3>
-                <p className="mt-2 text-mute">{f.desc}</p>
+            <Reveal key={i} delay={(i % 3) * 0.06} y={14}>
+              <div className="group flex h-full items-start gap-2.5 rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-4 sm:gap-3 sm:px-5 transition hover:border-gold/40">
+                <span className="mt-[3px] text-[12px] font-bold text-gold/80">{String(i + 1).padStart(2, "0")}</span>
+                <div className="min-w-0">
+                  <h3 className="text-[16px] font-extrabold tracking-tight sm:text-[17px]">{f.name}</h3>
+                  <p className="mt-1 text-[13px] leading-snug text-white/50 sm:text-[14px]">{f.desc}</p>
+                </div>
               </div>
             </Reveal>
           ))}
         </div>
-        <Reveal><p className="mt-8 text-center text-mute">🔒 {F.note}</p></Reveal>
+        <Reveal><p className="mt-6 text-center text-[13px] text-white/45 sm:text-[14px]">🔒 {F.note}</p></Reveal>
       </div>
     </section>
   );
