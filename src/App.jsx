@@ -170,7 +170,7 @@ function Header() {
           <img src={C.logoImg} alt="" width="40" height="40"
             className="h-9 w-9 shrink-0 rounded-full ring-1 ring-gold/40 transition-transform duration-500 group-hover:scale-105 sm:h-10 sm:w-10" />
           <span className="text-[15px] font-extrabold tracking-[-0.03em] text-white sm:text-[18px]"
-            dangerouslySetInnerHTML={{ __html: C.logo.replace("100%", '<span class="text-gold">100%</span>') }} />
+            dangerouslySetInnerHTML={{ __html: C.logo.replace("마음", '<span class="text-gold">마음</span>') }} />
         </a>
         <nav className="hidden items-center gap-9 text-[15px] font-medium text-white/60 md:flex lg:gap-11">
           {C.nav.map((n) => (
