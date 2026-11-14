@@ -47,6 +47,7 @@ const COPY = {
       { num: "2분", label: "즉시 환불" },
     ],
     photo: "images/profile.jpg",
+    art: "images/hero-art.webp",   // 첫 화면 오른쪽 그림 (남녀 + 금색 원)
     bubble: "와 진짜로 맞아요 진짜.. 진짜",
     rating: "크몽 후기 5.0 만점",
     relationsLabel: "상담 분야",   // 첫 화면 맨 아래 줄 앞 금색 글자

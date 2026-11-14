@@ -291,11 +291,11 @@ function Hero() {
         {/* photo card — lives in the same grid as the text, so it never drifts */}
         <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3, duration: 1, ease }}
           className="relative mx-auto w-full max-w-[460px] lg:max-w-[540px] lg:justify-self-end">
-          {/* soft neutral light behind the photo, no frame */}
-          <span className="absolute inset-[8%] rounded-full bg-white/[0.06] blur-3xl" aria-hidden="true" />
-          {/* edges dissolve into the dark background */}
-          <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] [mask-image:linear-gradient(to_bottom,#000_62%,transparent_100%)]">
-            <img src={H.photo} alt="점술신 상담사" className="h-full w-full object-cover object-[50%_20%]" />
+          {/* warm glow behind the artwork */}
+          <span className="absolute inset-[14%] rounded-full bg-gold/[0.10] blur-3xl" aria-hidden="true" />
+          {/* mood artwork: its black edges dissolve into the page */}
+          <div className="relative aspect-square [mask-image:radial-gradient(circle_closest-side_at_50%_48%,#000_91%,transparent_100%)]">
+            <img src={H.art} alt="그 사람의 속마음을 들여다보는 장면" className="h-full w-full object-cover" />
           </div>
 
         </motion.div>
