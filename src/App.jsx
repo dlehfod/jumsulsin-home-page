@@ -671,17 +671,20 @@ function Versus() {
     <section className="bg-navy py-[clamp(72px,12vw,160px)]">
       <div className={wrap + " text-center"}>
         <Reveal><H2 lines={V.title} /></Reveal>
-        <div className="mx-auto mt-14 flex max-w-[1000px] flex-col gap-6 md:gap-4">
-          {V.pairs.map((p, i) => (
-            <Reveal key={i} delay={i * 0.08}>
-              <div className="grid items-center gap-2 md:grid-cols-[1fr_auto_1fr] md:gap-5">
-                <div className="rounded-2xl bg-panel/70 px-6 py-6 text-[clamp(15px,1.7vw,21px)] font-bold text-white/40 line-through decoration-bad/60 md:text-right">{p[0]}</div>
-                <span className="text-lg font-black tracking-[0.08em] text-gold">VS</span>
-                <div className="rounded-2xl border border-gold/35 bg-gold/[0.09] px-6 py-6 text-[clamp(15px,1.7vw,21px)] font-bold md:text-left">✓ {p[1]}</div>
+        {/* before -> after, three rows inside one frame */}
+        <Reveal className="mx-auto mt-10 max-w-[860px] sm:mt-12">
+          <div className="divide-y divide-white/10 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]">
+            {V.pairs.map((p, i) => (
+              <div key={i} className="grid items-center gap-1.5 px-5 py-5 text-center md:grid-cols-[1fr_auto_1fr] md:gap-6 md:px-8 md:py-6">
+                <p className="text-[clamp(14px,1.5vw,18px)] font-medium text-white/45 md:text-right">{p[0]}</p>
+                <span className="text-[15px] font-bold text-gold md:text-[18px]" aria-hidden="true"><span className="md:hidden">↓</span><span className="hidden md:inline">→</span></span>
+                <p className="flex items-center justify-center gap-2 text-[clamp(15px,1.6vw,19px)] font-extrabold md:justify-start">
+                  <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-gold text-[10px] font-black text-ink" aria-hidden="true">✓</span>{p[1]}
+                </p>
               </div>
-            </Reveal>
-          ))}
-        </div>
+            ))}
+          </div>
+        </Reveal>
       </div>
     </section>
   );
