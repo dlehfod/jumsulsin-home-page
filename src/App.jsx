@@ -570,22 +570,14 @@ function Refund() {
           </div>
           <H2 lines={R.title} />
         </Reveal>
-        {/* one clean card: step on top, two outcomes side by side */}
-        <Reveal className="mx-auto mt-14 max-w-[820px] sm:mt-16">
-          <div className="overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.025]">
-            <div className="flex items-center justify-center gap-3 border-b border-white/10 px-5 py-5 sm:py-6">
-              <span className="text-[11px] font-bold tracking-[0.25em] text-gold sm:text-[12px]">STEP 01</span>
-              <span className="h-3 w-px bg-white/20" aria-hidden="true" />
-              <span className="text-[clamp(13px,1.6vw,18px)] font-semibold text-white/85">{R.start}</span>
-            </div>
-            <div className="grid grid-cols-2 divide-x divide-white/10">
-              {[{ o: R.fail, gold: false }, { o: R.pass, gold: true }].map(({ o, gold }) => (
-                <div key={o.tag} className={"px-4 py-8 text-center sm:px-8 sm:py-12 " + (gold ? "bg-gold/[0.04]" : "")}>
-                  <p className={"text-[12px] font-semibold sm:text-[14px] " + (gold ? "text-gold/80" : "text-white/45")}>{o.tag}</p>
-                  <p className={"mt-3 text-[clamp(24px,3.6vw,40px)] font-extrabold tracking-[-0.03em] " + (gold ? "text-gold" : "text-white")}>{o.big}</p>
-                  <p className="mt-3 text-[12px] leading-relaxed text-white/50 sm:text-[15px]">{o.small}</p>
-                </div>
-              ))}
+        {/* one clean card: read first, then refund any time */}
+        <Reveal className="mx-auto mt-14 max-w-[720px] sm:mt-16">
+          <div className="overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.025] text-center">
+            <p className="border-b border-white/10 px-5 py-5 text-[clamp(14px,1.7vw,19px)] font-semibold text-white/85 sm:py-6">{R.start}</p>
+            <div className="bg-gold/[0.04] px-5 py-10 sm:py-14">
+              <p className="text-[13px] font-semibold text-white/50 sm:text-[15px]">{R.offer.lead}</p>
+              <p className="mt-3 text-[clamp(28px,4.4vw,48px)] font-extrabold tracking-[-0.035em] text-gold">{R.offer.big}</p>
+              <p className="mt-3 text-[13px] text-white/55 sm:text-[15px]">{R.offer.small}</p>
             </div>
           </div>
         </Reveal>
