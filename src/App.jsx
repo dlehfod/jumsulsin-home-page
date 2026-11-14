@@ -570,15 +570,22 @@ function Refund() {
           </div>
           <H2 lines={R.title} />
         </Reveal>
-        {/* one clean card: read first, then refund any time */}
+        {/* two equal steps: read first -> refund any time */}
         <Reveal className="mx-auto mt-14 max-w-[720px] sm:mt-16">
-          <div className="overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.025] text-center">
-            <p className="border-b border-white/10 px-5 py-5 text-[clamp(14px,1.7vw,19px)] font-semibold text-white/85 sm:py-6">{R.start}</p>
-            <div className="bg-gold/[0.04] px-5 py-10 sm:py-14">
-              <p className="text-[13px] font-semibold text-white/50 sm:text-[15px]">{R.offer.lead}</p>
-              <p className="mt-3 text-[clamp(28px,4.4vw,48px)] font-extrabold tracking-[-0.035em] text-gold">{R.offer.big}</p>
-              <p className="mt-3 text-[13px] text-white/55 sm:text-[15px]">{R.offer.small}</p>
-            </div>
+          <div className="rounded-[28px] border border-white/10 bg-white/[0.025] px-5 py-10 text-center sm:px-10 sm:py-14">
+            {R.steps.map((st, i) => (
+              <div key={st.n}>
+                {i > 0 && (
+                  <div className="my-7 flex flex-col items-center sm:my-9" aria-hidden="true">
+                    <span className="h-7 w-px bg-linear-to-b from-white/5 to-gold/60" />
+                    <span className="mt-1 text-[12px] text-gold/80">▼</span>
+                  </div>
+                )}
+                <p className="text-[12px] font-bold tracking-[0.25em] text-gold/80 sm:text-[13px]">{st.n}</p>
+                <p className="mt-3 text-[clamp(22px,3.2vw,36px)] font-extrabold leading-[1.35] tracking-[-0.03em]"><Lines lines={st.lines} /></p>
+                {st.note && <p className="mt-3 text-[13px] text-white/50 sm:text-[15px]">{st.note}</p>}
+              </div>
+            ))}
           </div>
         </Reveal>
 
