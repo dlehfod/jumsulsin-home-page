@@ -744,7 +744,14 @@ function Profile() {
           <Reveal delay={0.2}>
             <ul className="mt-10 border-t border-black/10">
               {P.timeline.map((t) => (
-                <li key={t.text} className="border-b border-black/10 py-4 text-[17px] font-semibold">{t.text}</li>
+                <li key={t.text} className="flex items-center gap-3 whitespace-nowrap border-b border-black/10 py-[15px] text-[clamp(12.5px,3.55vw,17px)] font-medium text-[#3d3a47] sm:gap-4 sm:py-[18px]">
+                  <span className="h-[6px] w-[6px] shrink-0 rotate-45 bg-[#c49a3c]" aria-hidden="true" />
+                  <span>
+                    {t.text.split(t.hi).map((part, i, arr) => (
+                      <span key={i}>{part}{i < arr.length - 1 && <b className="font-extrabold text-[#a8730f]">{t.hi}</b>}</span>
+                    ))}
+                  </span>
+                </li>
               ))}
             </ul>
           </Reveal>
