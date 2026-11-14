@@ -169,12 +169,12 @@ const COPY = {
     title: ["이 기술로 관계를 해결한", "<em>까페 후기</em> 중 일부분"],
     note: "클릭하면 원본이 보입니다",
     items: [
-      { title: "60번 상담하고 못 푼 걸 한방에 해결했어요", tag: "까페 장문후기", href: "https://m.site.naver.com/1tRze" },
-      { title: "수년간 짝사랑 끝에, 덕분에 결혼합니다.", tag: "까페 장문후기", href: "https://m.site.naver.com/1tRze" },
-      { title: "점보느라 1000만원 날렸는데 해결함요.", tag: "까페 장문후기", href: "https://m.site.naver.com/1tRze" },
-      { title: "돈만 날렸다가 드디어 재회했어요.", tag: "까페 장문후기", href: "https://m.site.naver.com/1tRze" },
-      { title: "2000만원 썼는데 여기서 해결했습니다.", tag: "까페 장문후기", href: "https://m.site.naver.com/1tRze" },
-      { title: "4년간 안 좋았던 부부사이.. 좋아졌어요ㅜㅜ", tag: "까페 장문후기", href: "https://m.site.naver.com/1tRze" },
+      { title: "60번 상담하고 못 푼 걸 한방에 해결했어요", tag: "까페 장문후기", href: "https://cafe.naver.com/classictarot/24240" },
+      { title: "수년간 짝사랑 끝에, 덕분에 결혼합니다.", tag: "까페 장문후기", href: "https://cafe.naver.com/classictarot/22285" },
+      { title: "점보느라 1000만원 날렸는데 해결함요.", tag: "까페 장문후기", href: "https://cafe.naver.com/classictarot/23373" },
+      { title: "돈만 날렸다가 드디어 재회했어요.", tag: "까페 장문후기", href: "https://cafe.naver.com/classictarot/22299" },
+      { title: "2000만원 썼는데 여기서 해결했습니다.", tag: "까페 장문후기", href: "https://cafe.naver.com/classictarot/24211" },
+      { title: "4년간 안 좋았던 부부사이.. 좋아졌어요ㅜㅜ", tag: "까페 장문후기", href: "https://cafe.naver.com/classictarot/24216" },
     ],
     listImg: "images/cafe-list-2.png",   // 최신 후기 목록 캡처 (예전 것: images/cafe-list.jpg)
     listUrl: "cafe.naver.com · 상담후기 게시판",
