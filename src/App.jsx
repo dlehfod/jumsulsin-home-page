@@ -563,21 +563,18 @@ function Refund() {
           ))}
         </Reveal>
 
-        {/* the worry gets struck through, then the answer lands */}
-        <div className="mx-auto mt-20 max-w-[960px] sm:mt-36">
-          <motion.p initial="hide" whileInView="show" viewport={{ once: true, margin: "-60px" }}
-            className="flex flex-nowrap items-center justify-center gap-x-2 whitespace-nowrap text-[clamp(16px,3.6vw,48px)] font-bold leading-none tracking-[-0.03em] sm:gap-x-3">
-            <motion.span variants={{ hide: { opacity: 0 }, show: { opacity: 1, transition: { duration: 0.6 } } }}
-              className="text-white/70">{R.footer[0]}</motion.span>
-            <motion.span variants={{ hide: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0, transition: { duration: 0.7, ease } } }}
-              className="text-white/85">{R.footer[1]}</motion.span>
-            <motion.span variants={{ hide: { opacity: 0 }, show: { opacity: 1, transition: { delay: 0.3, duration: 0.6 } } }}
-              className="text-white/70">{R.footer[2]}</motion.span>
-          </motion.p>
-          <motion.p initial={{ opacity: 0, y: 24, filter: "blur(8px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            viewport={{ once: true, margin: "-80px" }} transition={{ delay: 1.35, duration: 0.8, ease }}
-            className="mt-5 whitespace-nowrap text-[clamp(20px,5.8vw,80px)] font-extrabold leading-[1.15] tracking-[-0.045em] sm:mt-7"
-            dangerouslySetInnerHTML={{ __html: R.footer[3] }} />
+        {/* the worry as a quiet question, then a calm answer */}
+        <div className="mx-auto mt-20 max-w-[960px] sm:mt-32">
+          <motion.p initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }} transition={{ duration: 0.7, ease }}
+            className="text-[clamp(16px,2vw,22px)] font-medium tracking-[-0.01em] text-white/55">{R.footer[0]}</motion.p>
+          <motion.span initial={{ scaleY: 0 }} whileInView={{ scaleY: 1 }} viewport={{ once: true, margin: "-60px" }}
+            transition={{ delay: 0.5, duration: 0.5, ease }} aria-hidden="true"
+            className="mx-auto my-5 block h-8 w-px origin-top bg-linear-to-b from-white/25 to-gold/60 sm:my-6 sm:h-10" />
+          <motion.p initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }} transition={{ delay: 0.9, duration: 0.8, ease }}
+            className="text-[clamp(26px,3.8vw,46px)] font-semibold leading-[1.3] tracking-[-0.025em] text-white/90"
+            dangerouslySetInnerHTML={{ __html: R.footer[1] }} />
         </div>
       </div>
     </section>
