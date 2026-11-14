@@ -280,8 +280,8 @@ function Hero() {
             <motion.p initial={{ opacity: 0, y: 14, filter: "blur(6px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               transition={{ delay: SUB_START + 0.45, duration: 0.7, ease }} className="font-bold text-white">
               {H.sub[1]}
-              {/* refund words: gold, fades in a beat later */}
-              <motion.span initial={{ color: "#ffffff" }} animate={{ color: "#ffc53d" }}
+              {/* refund words: red, fades in a beat later */}
+              <motion.span initial={{ color: "#ffffff" }} animate={{ color: "#ff5c5c" }}
                 transition={{ delay: SUB_START + 0.95, duration: 0.6 }}
                 className="font-extrabold">{H.subMark}</motion.span>
             </motion.p>
