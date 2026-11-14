@@ -570,23 +570,24 @@ function Refund() {
           </div>
           <H2 lines={R.title} />
         </Reveal>
-        {/* two equal steps: read first -> refund any time */}
-        <Reveal className="mx-auto mt-14 max-w-[720px] sm:mt-16">
-          <div className="rounded-[28px] border border-white/10 bg-white/[0.025] px-5 py-10 text-center sm:px-10 sm:py-14">
-            {R.steps.map((st, i) => (
-              <div key={st.n}>
-                {i > 0 && (
-                  <div className="my-7 flex flex-col items-center sm:my-9" aria-hidden="true">
-                    <span className="h-7 w-px bg-linear-to-b from-white/5 to-gold/60" />
-                    <span className="mt-1 text-[12px] text-gold/80">▼</span>
-                  </div>
-                )}
-                <p className="text-[12px] font-bold tracking-[0.25em] text-gold/80 sm:text-[13px]">{st.n}</p>
-                <p className="mt-3 text-[clamp(22px,3.2vw,36px)] font-extrabold leading-[1.35] tracking-[-0.03em]"><Lines lines={st.lines} /></p>
+        {/* two equal steps in soft boxes, joined by a thin line */}
+        <Reveal className="mx-auto mt-14 max-w-[640px] sm:mt-16">
+          {R.steps.map((st, i) => (
+            <div key={st.n}>
+              {i > 0 && (
+                <div className="flex justify-center" aria-hidden="true">
+                  <span className="h-10 w-px bg-linear-to-b from-white/15 to-gold/50 sm:h-12" />
+                </div>
+              )}
+              <div className={"relative rounded-2xl border px-5 pb-8 pt-9 text-center sm:px-10 sm:pb-10 sm:pt-11 " +
+                (i === R.steps.length - 1 ? "border-gold/25 bg-gold/[0.035]" : "border-white/10 bg-white/[0.025]")}>
+                <span className={"absolute left-1/2 top-0 grid h-8 w-8 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border bg-navy text-[11px] font-bold " +
+                  (i === R.steps.length - 1 ? "border-gold/50 text-gold" : "border-white/20 text-white/70")}>{st.n}</span>
+                <p className="text-[clamp(22px,3.2vw,34px)] font-extrabold leading-[1.35] tracking-[-0.03em]"><Lines lines={st.lines} /></p>
                 {st.note && <p className="mt-3 text-[13px] text-white/50 sm:text-[15px]">{st.note}</p>}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </Reveal>
 
         {/* the worry gets struck through, then the answer lands */}
