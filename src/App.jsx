@@ -565,14 +565,8 @@ function Refund() {
             className="flex flex-nowrap items-center justify-center gap-x-2 whitespace-nowrap text-[clamp(16px,3.6vw,48px)] font-bold leading-none tracking-[-0.03em] sm:gap-x-3">
             <motion.span variants={{ hide: { opacity: 0 }, show: { opacity: 1, transition: { duration: 0.6 } } }}
               className="text-white/70">{R.footer[0]}</motion.span>
-            <span className="relative inline-block py-1">
-              <motion.span variants={{ hide: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0, transition: { duration: 0.7, ease } } }}
-                className="block text-white/40">{R.footer[1]}</motion.span>
-              {/* strike line sits on the vertical centre of the words */}
-              <motion.span aria-hidden="true"
-                variants={{ hide: { scaleX: 0 }, show: { scaleX: 1, transition: { delay: 0.75, duration: 0.7, ease: [0.65, 0, 0.35, 1] } } }}
-                className="absolute inset-x-[-4px] top-1/2 h-[2px] origin-left -translate-y-1/2 rounded-full bg-gold sm:h-1" />
-            </span>
+            <motion.span variants={{ hide: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0, transition: { duration: 0.7, ease } } }}
+              className="text-white/85">{R.footer[1]}</motion.span>
             <motion.span variants={{ hide: { opacity: 0 }, show: { opacity: 1, transition: { delay: 0.3, duration: 0.6 } } }}
               className="text-white/70">{R.footer[2]}</motion.span>
           </motion.p>
