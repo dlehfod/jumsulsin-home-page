@@ -861,12 +861,11 @@ function FloatingCta() {
   }, []);
   return (
     <a href={L.kakao} onClick={openKakao} aria-label={C.mobileBar}
-      className={`fixed bottom-4 left-4 right-4 z-40 flex h-14 items-center justify-center gap-3 rounded-full border border-white/10 bg-ink/80 pl-2 pr-6 text-[16px] font-bold text-white shadow-[0_16px_50px_-10px_rgba(0,0,0,.8)] backdrop-blur-xl transition duration-500 hover:border-white/30 md:bottom-7 md:left-auto md:right-7 md:justify-start ${
+      className={`fixed bottom-4 right-4 z-40 flex h-11 items-center gap-2 rounded-full border border-white/10 bg-ink/85 pl-1.5 pr-4 text-[13px] font-semibold text-white/90 shadow-[0_12px_32px_-8px_rgba(0,0,0,.8)] backdrop-blur-xl transition duration-500 hover:border-white/30 hover:text-white sm:bottom-6 sm:right-6 sm:h-12 sm:pr-5 sm:text-[14px] ${
         show ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-6 opacity-0"
       }`}>
-      <span className="grid h-10 w-10 place-items-center rounded-full bg-kakao text-[10px] font-black text-ink" aria-hidden="true">TALK</span>
+      <span className="grid h-8 w-8 place-items-center rounded-full bg-kakao text-[8px] font-black text-ink sm:h-9 sm:w-9 sm:text-[9px]" aria-hidden="true">TALK</span>
       {C.mobileBar}
-      <span className="text-white/50" aria-hidden="true">→</span>
     </a>
   );
 }
