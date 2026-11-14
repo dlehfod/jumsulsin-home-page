@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>카카오톡 상담문의 | 점술신</title>
+<script>
+  // phones go straight to the KakaoTalk chat; PCs stay and see the QR
+  var KAKAO = "https://qr.kakao.com/talk/7mCX3MenhJENXlXx9_xmkPKn5pw-";
+  if (/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)) location.replace(KAKAO);
+</script>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{font-family:Pretendard,-apple-system,"Malgun Gothic",sans-serif;color:#f4efe6;
+       background:radial-gradient(700px 420px at 50% 20%,rgba(255,197,61,.10),transparent 70%),#05080f;
+       display:flex;align-items:center;justify-content:center;padding:24px}
+  .card{width:100%;max-width:400px;text-align:center}
+  h1{font-size:26px;font-weight:800;letter-spacing:-.5px;line-height:1.35}
+  h1 em{font-style:normal;color:#ffc53d}
+  .sub{margin-top:10px;font-size:15px;color:rgba(255,255,255,.55)}
+  .qr{margin:28px auto 0;width:240px;padding:14px;background:#fff;border-radius:18px;border:1px solid rgba(255,197,61,.5)}
+  .qr img{display:block;width:100%;height:auto}
+  .id{margin-top:24px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:15px}
+  .id span{color:rgba(255,255,255,.45)}
+  .id b{font-weight:700;letter-spacing:.3px}
+  .id button{font:inherit;font-size:13px;color:#ffc53d;background:none;border:1px solid rgba(255,197,61,.5);border-radius:999px;padding:4px 12px;cursor:pointer}
+  .id button:hover{background:#ffc53d;color:#05080f}
+  .back{display:inline-block;margin-top:30px;font-size:13px;color:rgba(255,255,255,.4);text-decoration:none}
+  .back:hover{color:#fff}
+</style>
+</head><body>
+<div class="card">
+  <h1>카카오톡 <em>상담문의</em></h1>
+  <p class="sub">휴대폰 카메라로 QR을 찍으면 바로 상담 채팅이 열립니다.</p>
+  <div class="qr"><img src="images/kakao-qr.png" alt="카카오톡 상담 QR코드"></div>
+  <div class="id"><span>카카오톡 ID</span><b>jumsulsin</b><button type="button" id="copy">복사</button></div>
+  <a class="back" href="/">점술신 홈페이지 →</a>
+</div>
+<script>
+  document.getElementById("copy").onclick = function () {
+    var b = this;
+    navigator.clipboard.writeText("jumsulsin").then(function () { b.textContent = "복사됨"; setTimeout(function () { b.textContent = "복사"; }, 1800); });
+  };
+</script>
+</body></html>
