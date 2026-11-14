@@ -247,7 +247,7 @@ const COPY = {
   final: {
     label: "Contact",
     title: ["그 사람 마음을 읽는", "<em>점술 연애상담</em>"],
-    desc: "24시간 언제든 카톡으로 문의 주세요.",
+    // desc removed
     cafeLead: "15년간 운영중인",            // 문의 카드 아래 까페 버튼 윗줄
     cafeMain: "네이버 상담까페 바로가기",     // 문의 카드 아래 까페 버튼 아랫줄
     cta: "카카오톡 상담문의",

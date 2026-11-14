@@ -772,25 +772,33 @@ function Contact() {
       <div className="absolute inset-0 bg-[radial-gradient(900px_500px_at_50%_0%,rgba(255,197,61,.07),transparent_65%)]" />
       <div className={wrap + " relative"}>
         <Reveal><h2 className="text-[clamp(34px,6.4vw,88px)] font-extrabold leading-[1.15] tracking-[-0.04em]"><Lines lines={Z.title} /></h2></Reveal>
-        <Reveal delay={0.1}><p className="mt-6 text-[clamp(15px,1.6vw,19px)] text-white/60">{Z.desc}</p></Reveal>
         <Reveal delay={0.15}>
-          <div className="mt-10 flex flex-col items-center gap-4">
+          <div className="mt-12 flex flex-col items-center sm:mt-14">
+            {/* thin gold outline button, fills on hover */}
             <a href={L.kakao} onClick={openKakao}
-              className={btn + " h-14 bg-white px-9 text-[16px] text-ink shadow-[0_18px_50px_-18px_rgba(255,255,255,.45)] hover:bg-gold sm:h-16 sm:px-11 sm:text-[17px]"}>
-              {Z.cta} <Arrow />
+              className="group inline-flex h-14 items-center gap-3 rounded-full border border-gold/60 px-10 text-[16px] font-semibold tracking-[-0.01em] text-gold transition duration-300 hover:bg-gold hover:text-ink sm:h-[60px] sm:px-12 sm:text-[17px]">
+              {Z.cta}
+              <span className="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">→</span>
             </a>
-            <p className="flex items-center gap-2 text-[14px] text-white/45">
-              카카오톡 ID <span className="font-bold text-white/85">{C.kakaoId}</span>
-              <span className="text-white/20" aria-hidden="true">·</span>
-              <button type="button" onClick={copy} className="text-white/55 underline decoration-white/25 underline-offset-4 transition hover:text-white">
-                {copied ? "복사됨" : "복사"}
+            {/* ID: hairlines either side, click the ID to copy */}
+            <div className="mt-7 flex items-center gap-4 text-[13px] sm:text-[14px]">
+              <span className="h-px w-8 bg-white/15 sm:w-12" aria-hidden="true" />
+              <span className="text-white/40">카카오톡 ID</span>
+              <button type="button" onClick={copy} title="ID 복사"
+                className="group inline-flex items-center gap-1.5 font-semibold tracking-[0.02em] text-white/80 transition hover:text-white">
+                {C.kakaoId}
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"
+                  className="text-white/35 transition group-hover:text-gold">
+                  {copied ? <path d="M5 12l5 5L20 7" /> : <><rect x="9" y="9" width="11" height="11" rx="2" /><path d="M5 15V5a2 2 0 0 1 2-2h10" /></>}
+                </svg>
               </button>
-            </p>
+              <span className="h-px w-8 bg-white/15 sm:w-12" aria-hidden="true" />
+            </div>
           </div>
         </Reveal>
         <Reveal delay={0.2}>
           <a href={L.cafe} target="_blank" rel="noopener"
-            className="group mx-auto mt-10 inline-flex items-center gap-3 text-[15px] text-white/55 transition hover:text-white sm:text-[16px]">
+            className="group mx-auto mt-12 inline-flex items-center gap-3 text-[15px] text-white/55 transition hover:text-white sm:text-[16px]">
             <span className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-[#03c75a] text-[12px] font-black text-white" aria-hidden="true">N</span>
             <span>
               {Z.cafeLead}{" "}
