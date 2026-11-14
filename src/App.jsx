@@ -30,7 +30,7 @@ const Label = ({ children, className = "" }) => (
 );
 
 const H2 = ({ lines, className = "" }) => (
-  <h2 className={"text-[clamp(30px,4.4vw,58px)] font-extrabold leading-[1.25] tracking-[-0.03em] " + className}>
+  <h2 className={"text-[clamp(24px,4.4vw,58px)] font-extrabold leading-[1.25] tracking-[-0.03em] " + className}>
     <Lines lines={lines} />
   </h2>
 );
@@ -262,7 +262,7 @@ function Hero() {
         {/* text */}
         <div>
           <h1 aria-label={H.title.map((l) => l.replace(/<[^>]+>/g, "")).join(" ")}
-            className="text-[clamp(36px,4.3vw,62px)] font-extrabold leading-[1.17] tracking-[-0.04em]">
+            className="text-[clamp(29px,4.3vw,62px)] font-extrabold leading-[1.17] tracking-[-0.04em]">
             {H.title.map((l, i) => (
               <HeroLine key={i} html={l} start={TITLE_START + i * LINE_GAP} />
             ))}
@@ -273,7 +273,7 @@ function Hero() {
             transition={{ delay: SUB_START - 0.25, duration: 0.7, ease }}
             className="mt-9 block h-[3px] w-20 origin-left rounded-full bg-gold" />
 
-          <div className="mt-7 text-[clamp(18px,1.6vw,22px)] leading-[1.7]">
+          <div className="mt-7 text-[clamp(16px,1.6vw,22px)] leading-[1.7]">
             <motion.p initial={{ opacity: 0, y: 14, filter: "blur(6px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               transition={{ delay: SUB_START, duration: 0.7, ease }} className="text-white/80">
               {H.sub[0]}
@@ -364,7 +364,7 @@ function EvidenceCard({ kind, img, onZoom, caption, sub }) {
 function Proof({ onZoom }) {
   const P = C.proof, K = C.cafe;
   return (
-    <section id="cafe" className="relative overflow-hidden bg-navy py-[clamp(110px,14vw,180px)]">
+    <section id="cafe" className="relative overflow-hidden bg-navy py-[clamp(79px,14vw,180px)]">
       <div className="absolute inset-0 bg-[radial-gradient(700px_400px_at_50%_20%,rgba(255,197,61,.09),transparent_70%)]" />
       <div className={wrap + " relative"}>
         <div className="text-center">
@@ -372,7 +372,7 @@ function Proof({ onZoom }) {
           <div className="mx-auto mt-14 grid max-w-[760px] grid-cols-2 divide-x divide-white/15">
             {P.stats.map((s, i) => (
               <Reveal key={s.label} delay={0.15 + i * 0.1} className="px-4">
-                <p className="text-[clamp(38px,7.4vw,104px)] font-extrabold leading-none tracking-[-0.045em] text-gold">
+                <p className="text-[clamp(30px,7.4vw,104px)] font-extrabold leading-none tracking-[-0.045em] text-gold">
                   <Counter to={s.num} />{s.suffix}
                 </p>
                 <p className="mt-4 text-[clamp(15px,1.6vw,20px)] font-bold text-white/85">{s.label}</p>
@@ -392,7 +392,7 @@ function Proof({ onZoom }) {
         {/* cafe long-form reviews */}
         <div className="mx-auto mt-28 max-w-[1040px]">
           <Reveal className="text-center">
-            <h3 className="text-[clamp(26px,3.2vw,40px)] font-extrabold leading-[1.3] tracking-[-0.03em]"><Lines lines={K.title} /></h3>
+            <h3 className="text-[clamp(21px,3.2vw,40px)] font-extrabold leading-[1.3] tracking-[-0.03em]"><Lines lines={K.title} /></h3>
           </Reveal>
           <ul className="mx-auto mt-10 max-w-[860px] overflow-hidden rounded-2xl border border-line bg-ink/40">
             {K.items.map((c, i) => (
@@ -410,7 +410,7 @@ function Proof({ onZoom }) {
           </ul>
           <Reveal className="mx-auto mt-6 max-w-[860px]">
             <div className="flex flex-col items-center gap-7 rounded-2xl border border-dashed border-white/20 px-6 py-9 text-center sm:px-9">
-              <p className="text-[clamp(19px,2.2vw,27px)] font-bold leading-[1.5]"><Lines lines={K.more} /></p>
+              <p className="text-[clamp(17px,2.2vw,27px)] font-bold leading-[1.5]"><Lines lines={K.more} /></p>
               <div className="flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row">
                 <a href={L.cafeReviews} target="_blank" rel="noopener" className={btnGhost + " h-12 px-6 text-[16px]"}>{K.moreCta} <Arrow /></a>
                 <a href={L.kmong} target="_blank" rel="noopener" className={btnGhost + " h-12 px-6 text-[16px]"}>{K.kmong.cta} <Arrow /></a>
@@ -422,7 +422,7 @@ function Proof({ onZoom }) {
         <Reveal delay={0.1}>
           <div className="mx-auto mt-24 max-w-[760px] text-center">
             <span className="mx-auto block h-12 w-px bg-linear-to-b from-transparent to-gold/60" aria-hidden="true" />
-            <p className="mt-8 text-[clamp(24px,3vw,38px)] font-extrabold leading-[1.4] tracking-[-0.03em]"><Lines lines={P.guarantee} /></p>
+            <p className="mt-8 text-[clamp(19px,3vw,38px)] font-extrabold leading-[1.4] tracking-[-0.03em]"><Lines lines={P.guarantee} /></p>
           </div>
         </Reveal>
       </div>
@@ -434,12 +434,12 @@ function Proof({ onZoom }) {
 function Views({ onZoom }) {
   const V = C.views, K = C.kakao;
   return (
-    <section id="kakao" className="py-[clamp(100px,12vw,160px)]">
+    <section id="kakao" className="py-[clamp(72px,12vw,160px)]">
       <div className={wrap + " text-center"}>
         <Reveal delay={0.05}>
-          <p className="text-[clamp(18px,1.9vw,24px)] font-medium tracking-[0.02em] text-white/50">{V.title[0]}</p>
+          <p className="text-[clamp(16px,1.9vw,24px)] font-medium tracking-[0.02em] text-white/50">{V.title[0]}</p>
           <span className="mx-auto mt-6 block h-8 w-px bg-white/20" aria-hidden="true" />
-          <h2 className="mt-6 text-[clamp(34px,5vw,66px)] font-extrabold leading-[1.2] tracking-[-0.04em]"
+          <h2 className="mt-6 text-[clamp(27px,5vw,66px)] font-extrabold leading-[1.2] tracking-[-0.04em]"
             dangerouslySetInnerHTML={{ __html: V.title[1] }} />
         </Reveal>
       </div>
@@ -512,9 +512,9 @@ function Read() {
     return () => clearInterval(t);
   }, [R.nodes.length]);
   return (
-    <section id="read" className="py-[clamp(100px,12vw,160px)]">
+    <section id="read" className="py-[clamp(72px,12vw,160px)]">
       <Reveal className={wrap}>
-        <h2 className="whitespace-nowrap text-center text-[clamp(25px,4.6vw,62px)] font-extrabold leading-[1.25] tracking-[-0.035em]"
+        <h2 className="whitespace-nowrap text-center text-[clamp(20px,4.6vw,62px)] font-extrabold leading-[1.25] tracking-[-0.035em]"
           dangerouslySetInnerHTML={{ __html: R.title }} />
         <span className="mx-auto mt-8 block h-[3px] w-14 rounded-full bg-gold" aria-hidden="true" />
       </Reveal>
@@ -531,7 +531,7 @@ function Read() {
             <Reveal key={i} delay={i * 0.05}>
               <li className="group flex cursor-default items-baseline gap-6 border-b border-line py-5 first:border-t sm:gap-8 sm:py-6">
                 <span className="w-10 shrink-0 text-[17px] font-extrabold text-gold">{String(i + 1).padStart(2, "0")}</span>
-                <span className="text-[clamp(18px,1.6vw,23px)] font-medium tracking-[-0.02em] text-white/70 transition duration-300 group-hover:translate-x-2 group-hover:font-bold group-hover:text-white">{t}</span>
+                <span className="text-[clamp(16px,1.6vw,23px)] font-medium tracking-[-0.02em] text-white/70 transition duration-300 group-hover:translate-x-2 group-hover:font-bold group-hover:text-white">{t}</span>
               </li>
             </Reveal>
           ))}
@@ -545,12 +545,12 @@ function Read() {
 function Waste() {
   const W = C.waste;
   return (
-    <section className="relative overflow-hidden py-[clamp(130px,16vw,220px)] text-center">
+    <section className="relative overflow-hidden py-[clamp(94px,16vw,220px)] text-center">
       <div className="absolute inset-0 bg-[radial-gradient(600px_300px_at_50%_60%,rgba(255,197,61,.07),transparent_70%)]" />
       <div className={wrap + " relative"}>
-        <Reveal><p className="text-[clamp(19px,2vw,26px)] font-semibold text-mute">{W.small}</p></Reveal>
+        <Reveal><p className="text-[clamp(17px,2vw,26px)] font-semibold text-mute">{W.small}</p></Reveal>
         <Reveal delay={0.1}>
-          <h2 className="mt-6 text-[clamp(42px,7vw,100px)] font-extrabold leading-[1.15] tracking-[-0.04em]"><Lines lines={W.big} /></h2>
+          <h2 className="mt-6 text-[clamp(34px,7vw,100px)] font-extrabold leading-[1.15] tracking-[-0.04em]"><Lines lines={W.big} /></h2>
         </Reveal>
       </div>
     </section>
@@ -561,11 +561,11 @@ function Waste() {
 function Refund() {
   const R = C.refund;
   return (
-    <section id="refund" className="bg-navy py-[clamp(100px,12vw,160px)]">
+    <section id="refund" className="bg-navy py-[clamp(72px,12vw,160px)]">
       <div className={wrap + " text-center"}>
         <Reveal>
           <div className="mb-9 flex flex-col items-center">
-            <span className="pl-[0.4em] text-[clamp(17px,1.7vw,21px)] font-bold tracking-[0.4em] text-gold">{R.label}</span>
+            <span className="pl-[0.4em] text-[clamp(15px,1.7vw,21px)] font-bold tracking-[0.4em] text-gold">{R.label}</span>
             <span className="mt-4 h-px w-10 bg-gold/70" aria-hidden="true" />
           </div>
           <H2 lines={R.title} />
@@ -573,7 +573,7 @@ function Refund() {
         <div className="mx-auto mt-16 max-w-[880px]">
           <Reveal>
             <div className="rounded-3xl border border-line bg-panel px-6 py-7 sm:px-10">
-              <p className="text-[clamp(19px,2vw,25px)] font-bold">{R.start}</p>
+              <p className="text-[clamp(17px,2vw,25px)] font-bold">{R.start}</p>
             </div>
           </Reveal>
           <div className="relative mx-auto hidden h-14 w-1/2 md:block" aria-hidden="true">
@@ -586,14 +586,14 @@ function Refund() {
             <Reveal>
               <div className="h-full rounded-3xl border border-bad/25 bg-bad/[0.05] p-8">
                 <span className="rounded-full bg-bad/15 px-3 py-1 text-[13px] font-bold text-bad">{R.fail.tag}</span>
-                <p className="mt-5 text-[clamp(21px,2.2vw,27px)] font-extrabold leading-snug">{R.fail.title}</p>
+                <p className="mt-5 text-[clamp(19px,2.2vw,27px)] font-extrabold leading-snug">{R.fail.title}</p>
                 <p className="mt-2 text-mute">{R.fail.desc}</p>
               </div>
             </Reveal>
             <Reveal delay={0.1}>
               <div className="h-full rounded-3xl border border-gold/50 bg-gold/[0.07] p-8 shadow-[0_0_80px_-30px_rgba(255,197,61,.5)]">
                 <span className="rounded-full bg-gold/20 px-3 py-1 text-[13px] font-bold text-gold">{R.pass.tag}</span>
-                <p className="mt-5 text-[clamp(21px,2.2vw,27px)] font-extrabold leading-snug">{R.pass.title}</p>
+                <p className="mt-5 text-[clamp(19px,2.2vw,27px)] font-extrabold leading-snug">{R.pass.title}</p>
                 <p className="mt-2 text-mute">{R.pass.desc}</p>
               </div>
             </Reveal>
@@ -618,7 +618,7 @@ function Refund() {
           </motion.p>
           <motion.p initial={{ opacity: 0, y: 24, filter: "blur(8px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             viewport={{ once: true, margin: "-80px" }} transition={{ delay: 1.35, duration: 0.8, ease }}
-            className="mt-5 whitespace-nowrap text-[clamp(25px,5.8vw,80px)] font-extrabold leading-[1.15] tracking-[-0.045em] sm:mt-7"
+            className="mt-5 whitespace-nowrap text-[clamp(20px,5.8vw,80px)] font-extrabold leading-[1.15] tracking-[-0.045em] sm:mt-7"
             dangerouslySetInnerHTML={{ __html: R.footer[3] }} />
         </div>
       </div>
@@ -630,7 +630,7 @@ function Refund() {
 function Fields() {
   const F = C.fields;
   return (
-    <section className="bg-navy py-[clamp(100px,12vw,160px)]">
+    <section className="bg-navy py-[clamp(72px,12vw,160px)]">
       <div className={wrap}>
         <Reveal><H2 lines={F.title} /></Reveal>
         <div className="mt-14 grid overflow-hidden rounded-3xl border border-line sm:grid-cols-2 lg:grid-cols-3">
@@ -638,7 +638,7 @@ function Fields() {
             <Reveal key={i} delay={(i % 3) * 0.07} className="border-line [&:not(:last-child)]:border-b sm:[&:nth-child(odd)]:border-r lg:[&:nth-child(odd)]:border-r-0 lg:[&:not(:nth-child(3n))]:border-r lg:[&:nth-child(n+4)]:border-b-0">
               <div className="group h-full p-8 transition hover:bg-white/[0.03] sm:p-10">
                 <span className="text-[56px] font-extrabold leading-none text-transparent [-webkit-text-stroke:1px_rgba(255,197,61,.55)] transition group-hover:text-gold">{String(i + 1).padStart(2, "0")}</span>
-                <h3 className="mt-6 text-[clamp(22px,2.2vw,28px)] font-extrabold tracking-tight">{f.name}</h3>
+                <h3 className="mt-6 text-[clamp(20px,2.2vw,28px)] font-extrabold tracking-tight">{f.name}</h3>
                 <p className="mt-2 text-mute">{f.desc}</p>
               </div>
             </Reveal>
@@ -652,11 +652,11 @@ function Fields() {
 
 function Stats() {
   return (
-    <section className="border-y border-line py-[clamp(70px,9vw,110px)]">
+    <section className="border-y border-line py-[clamp(50px,9vw,110px)]">
       <div className={wrap + " grid gap-10 text-center sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-line"}>
         {C.stats.map((s) => (
           <Reveal key={s.label}>
-            <p className="text-[clamp(52px,6.4vw,92px)] font-extrabold leading-none tracking-[-0.04em] text-gold"><Counter to={s.num} />{s.suffix}</p>
+            <p className="text-[clamp(42px,6.4vw,92px)] font-extrabold leading-none tracking-[-0.04em] text-gold"><Counter to={s.num} />{s.suffix}</p>
             <p className="mt-3 text-[clamp(15px,1.5vw,19px)] font-semibold text-mute">{s.label}</p>
           </Reveal>
         ))}
@@ -669,10 +669,10 @@ function Stats() {
 function Compare() {
   const P = C.compare;
   return (
-    <section className="py-[clamp(100px,12vw,160px)]">
+    <section className="py-[clamp(72px,12vw,160px)]">
       <div className={wrap}>
         <Reveal className="text-center">
-          <h2 className="text-[clamp(28px,4.4vw,58px)] font-extrabold leading-[1.25] tracking-[-0.03em] sm:whitespace-nowrap"
+          <h2 className="text-[clamp(22px,4.4vw,58px)] font-extrabold leading-[1.25] tracking-[-0.03em] sm:whitespace-nowrap"
             dangerouslySetInnerHTML={{ __html: P.title.join(" ") }} />
         </Reveal>
         <div className="mx-auto mt-14 grid max-w-[1000px] gap-5 md:grid-cols-2">
@@ -680,7 +680,7 @@ function Compare() {
             <div className="h-full rounded-3xl border border-line bg-ink/50 p-8 sm:p-10">
               <h3 className="border-b border-line pb-5 text-xl font-bold text-mute">{P.othersName}</h3>
               <ul>{P.others.map((t) => (
-                <li key={t} className="flex items-start gap-4 border-b border-line py-5 text-[clamp(17px,1.6vw,20px)] font-semibold text-mute last:border-0">
+                <li key={t} className="flex items-start gap-4 border-b border-line py-5 text-[clamp(15px,1.6vw,20px)] font-semibold text-mute last:border-0">
                   <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-bad/15 text-sm font-extrabold text-bad">✕</span>{t}
                 </li>))}
               </ul>
@@ -690,7 +690,7 @@ function Compare() {
             <div className="h-full rounded-3xl border border-gold/50 bg-[linear-gradient(160deg,rgba(255,197,61,.13),rgba(15,34,51,.9)_55%)] p-8 shadow-[0_0_90px_-30px_rgba(255,197,61,.45)] sm:p-10">
               <h3 className="flex items-center gap-2 border-b border-gold/25 pb-5 text-xl font-extrabold text-gold">{P.mineName}</h3>
               <ul>{P.mine.map((t) => (
-                <li key={t} className="flex items-start gap-4 border-b border-white/10 py-5 text-[clamp(17px,1.6vw,20px)] font-bold last:border-0">
+                <li key={t} className="flex items-start gap-4 border-b border-white/10 py-5 text-[clamp(15px,1.6vw,20px)] font-bold last:border-0">
                   <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gold text-sm font-extrabold text-ink">✓</span>{t}
                 </li>))}
               </ul>
@@ -706,16 +706,16 @@ function Compare() {
 function Versus() {
   const V = C.versus;
   return (
-    <section className="bg-navy py-[clamp(100px,12vw,160px)]">
+    <section className="bg-navy py-[clamp(72px,12vw,160px)]">
       <div className={wrap + " text-center"}>
         <Reveal><H2 lines={V.title} /></Reveal>
         <div className="mx-auto mt-14 flex max-w-[1000px] flex-col gap-6 md:gap-4">
           {V.pairs.map((p, i) => (
             <Reveal key={i} delay={i * 0.08}>
               <div className="grid items-center gap-2 md:grid-cols-[1fr_auto_1fr] md:gap-5">
-                <div className="rounded-2xl bg-panel/70 px-6 py-6 text-[clamp(17px,1.7vw,21px)] font-bold text-white/40 line-through decoration-bad/60 md:text-right">{p[0]}</div>
+                <div className="rounded-2xl bg-panel/70 px-6 py-6 text-[clamp(15px,1.7vw,21px)] font-bold text-white/40 line-through decoration-bad/60 md:text-right">{p[0]}</div>
                 <span className="text-lg font-black tracking-[0.08em] text-gold">VS</span>
-                <div className="rounded-2xl border border-gold/35 bg-gold/[0.09] px-6 py-6 text-[clamp(17px,1.7vw,21px)] font-bold md:text-left">✓ {p[1]}</div>
+                <div className="rounded-2xl border border-gold/35 bg-gold/[0.09] px-6 py-6 text-[clamp(15px,1.7vw,21px)] font-bold md:text-left">✓ {p[1]}</div>
               </div>
             </Reveal>
           ))}
@@ -729,7 +729,7 @@ function Versus() {
 function Profile() {
   const P = C.profile;
   return (
-    <section id="profile" className="light bg-[#f3eee5] py-[clamp(100px,12vw,160px)] text-[#14131c]">
+    <section id="profile" className="light bg-[#f3eee5] py-[clamp(72px,12vw,160px)] text-[#14131c]">
       <div className={wrap + " grid items-center gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20"}>
         <Reveal>
           <div className="relative mx-auto max-w-[460px]">
@@ -739,7 +739,7 @@ function Profile() {
         </Reveal>
         <div>
           <Reveal>
-            <blockquote className="border-l-4 border-[#c49a3c] pl-5 text-[clamp(22px,2.4vw,30px)] font-extrabold leading-snug tracking-[-0.02em]">“{P.quote}”</blockquote>
+            <blockquote className="border-l-4 border-[#c49a3c] pl-5 text-[clamp(20px,2.4vw,30px)] font-extrabold leading-snug tracking-[-0.02em]">“{P.quote}”</blockquote>
           </Reveal>
           <Reveal delay={0.2}>
             <ul className="mt-10 border-t border-black/10">
@@ -773,16 +773,16 @@ function Profile() {
 function Refuse() {
   const X = C.refuse;
   return (
-    <section className="bg-black py-[clamp(100px,12vw,160px)] text-center">
+    <section className="bg-black py-[clamp(72px,12vw,160px)] text-center">
       <div className={wrap}>
         <Reveal><p className="inline-block rounded-full border border-bad/40 px-5 py-2 text-[15px] font-extrabold tracking-[0.1em] text-bad">⚠ {X.label}</p></Reveal>
-        <Reveal delay={0.05}><h2 className="mt-7 text-[clamp(42px,6.4vw,88px)] font-extrabold tracking-[-0.04em]">{X.title}</h2></Reveal>
-        <Reveal delay={0.1}><p className="mt-6 text-[clamp(20px,2.3vw,29px)] font-bold leading-[1.5] text-white/85"><Lines lines={X.desc} /></p></Reveal>
+        <Reveal delay={0.05}><h2 className="mt-7 text-[clamp(34px,6.4vw,88px)] font-extrabold tracking-[-0.04em]">{X.title}</h2></Reveal>
+        <Reveal delay={0.1}><p className="mt-6 text-[clamp(18px,2.3vw,29px)] font-bold leading-[1.5] text-white/85"><Lines lines={X.desc} /></p></Reveal>
         <Reveal delay={0.15}><p className="mt-12 text-mute">{X.sub}</p></Reveal>
         <ol className="mx-auto mt-7 flex max-w-[720px] flex-col gap-3 text-left">
           {X.items.map((t, i) => (
             <Reveal key={i} delay={0.15 + i * 0.07}>
-              <li className="flex items-center gap-5 rounded-2xl border border-line bg-white/[0.02] px-6 py-5 text-[clamp(17px,1.7vw,20px)] font-bold">
+              <li className="flex items-center gap-5 rounded-2xl border border-line bg-white/[0.02] px-6 py-5 text-[clamp(15px,1.7vw,20px)] font-bold">
                 <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-bad/15 font-extrabold text-bad">{i + 1}</span>{t}
               </li>
             </Reveal>
@@ -801,10 +801,10 @@ function Contact() {
     try { await navigator.clipboard.writeText(C.kakaoId); setCopied(true); setTimeout(() => setCopied(false), 1800); } catch { /* ignore */ }
   };
   return (
-    <section id="contact" className="relative overflow-hidden py-[clamp(110px,13vw,170px)] text-center">
+    <section id="contact" className="relative overflow-hidden py-[clamp(79px,13vw,170px)] text-center">
       <div className="absolute inset-0 bg-[radial-gradient(900px_500px_at_50%_0%,rgba(255,197,61,.07),transparent_65%)]" />
       <div className={wrap + " relative"}>
-        <Reveal><h2 className="text-[clamp(42px,6.4vw,88px)] font-extrabold leading-[1.15] tracking-[-0.04em]"><Lines lines={Z.title} /></h2></Reveal>
+        <Reveal><h2 className="text-[clamp(34px,6.4vw,88px)] font-extrabold leading-[1.15] tracking-[-0.04em]"><Lines lines={Z.title} /></h2></Reveal>
         <Reveal delay={0.15}>
           <div className="mx-auto mt-14 flex max-w-[760px] flex-col items-stretch gap-6 rounded-[28px] border border-white/10 bg-white/[0.03] p-6 text-left backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between sm:p-8">
             <div className="flex items-center gap-4">
