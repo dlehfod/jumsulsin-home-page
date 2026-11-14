@@ -397,12 +397,6 @@ function Proof({ onZoom }) {
           </Reveal>
         </div>
 
-        <Reveal delay={0.1}>
-          <div className="mx-auto mt-24 max-w-[760px] text-center">
-            <span className="mx-auto block h-12 w-px bg-linear-to-b from-transparent to-gold/60" aria-hidden="true" />
-            <p className="mt-8 text-[clamp(19px,3vw,38px)] font-extrabold leading-[1.4] tracking-[-0.03em]"><Lines lines={P.guarantee} /></p>
-          </div>
-        </Reveal>
       </div>
     </section>
   );
