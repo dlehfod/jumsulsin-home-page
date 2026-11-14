@@ -448,7 +448,7 @@ function MindMap({ labels, active }) {
       {nodes.map((n, i) => (
         <line key={"l" + i} x1={n.lx} y1={n.ly} x2={n.x} y2={n.y}
           stroke={active === i ? "rgba(255,197,61,.8)" : "rgba(255,255,255,.1)"} strokeWidth={active === i ? 1.5 : 1}
-          style={{ transition: "stroke .3s" }} />
+          style={{ transition: "stroke .2s" }} />
       ))}
 
       <circle cx={cx} cy={cy} r={inner} fill="rgba(255,197,61,.06)" stroke="rgba(255,197,61,.35)" />
@@ -459,11 +459,11 @@ function MindMap({ labels, active }) {
         const on = active === i;
         return (
           <g key={"n" + i}>
-            <circle cx={n.x} cy={n.y} r="40" fill="rgba(255,197,61,.16)" style={{ opacity: on ? 1 : 0, transition: "opacity .3s" }} />
+            <circle cx={n.x} cy={n.y} r="40" fill="rgba(255,197,61,.16)" style={{ opacity: on ? 1 : 0, transition: "opacity .2s" }} />
             <circle cx={n.x} cy={n.y} r="31" fill={on ? "#ffc53d" : "#0f2233"} stroke={on ? "#ffc53d" : "rgba(255,255,255,.18)"}
-              style={{ transition: "fill .3s, stroke .3s" }} />
+              style={{ transition: "fill .2s, stroke .2s" }} />
             <text x={n.x} y={n.y + 4.5} textAnchor="middle" fontSize={labels[i].length > 3 ? 11.5 : 13} fontWeight="800" letterSpacing="-0.3"
-              fill={on ? "#05080f" : "rgba(255,255,255,.7)"} style={{ transition: "fill .3s" }}>
+              fill={on ? "#05080f" : "rgba(255,255,255,.7)"} style={{ transition: "fill .2s" }}>
               {labels[i]}
             </text>
           </g>
@@ -477,7 +477,7 @@ function Read() {
   const R = C.read;
   const [node, setNode] = useState(0);
   useEffect(() => {
-    const t = setInterval(() => setNode((n) => (n + 1) % R.nodes.length), 1100);
+    const t = setInterval(() => setNode((n) => (n + 1) % R.nodes.length), 700);
     return () => clearInterval(t);
   }, [R.nodes.length]);
   return (
