@@ -514,7 +514,7 @@ function Read() {
 function Waste() {
   const W = C.waste;
   return (
-    <section className="relative overflow-hidden bg-navy py-[clamp(94px,16vw,220px)] text-center">
+    <section className="relative overflow-hidden py-[clamp(94px,16vw,220px)] text-center">
       <div className="absolute inset-0 bg-[radial-gradient(600px_300px_at_50%_60%,rgba(255,197,61,.07),transparent_70%)]" />
       <div className={wrap + " relative"}>
         <Reveal><p className="text-[clamp(17px,2vw,26px)] font-semibold text-mute">{W.small}</p></Reveal>
@@ -530,7 +530,7 @@ function Waste() {
 function Refund() {
   const R = C.refund;
   return (
-    <section id="refund" className="py-[clamp(72px,12vw,160px)]">
+    <section id="refund" className="bg-navy py-[clamp(72px,12vw,160px)]">
       <div className={wrap + " text-center"}>
         <Reveal>
           <div className="mb-9 flex flex-col items-center">
@@ -550,7 +550,7 @@ function Refund() {
               )}
               <div className={"relative rounded-2xl border px-5 pb-8 pt-9 text-center sm:px-10 sm:pb-10 sm:pt-11 " +
                 (i === R.steps.length - 1 ? "border-gold/25 bg-gold/[0.035]" : "border-white/10 bg-white/[0.025]")}>
-                <span className={"absolute left-1/2 top-0 grid h-8 w-8 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border bg-ink text-[11px] font-bold " +
+                <span className={"absolute left-1/2 top-0 grid h-8 w-8 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border bg-navy text-[11px] font-bold " +
                   (i === R.steps.length - 1 ? "border-gold/50 text-gold" : "border-white/20 text-white/70")}>{st.n}</span>
                 {/* lighter two-level type so the steps read differently from the heavy H2 above */}
                 <p className="text-[clamp(14px,1.5vw,17px)] font-medium tracking-[-0.01em] text-white/55"
@@ -904,8 +904,8 @@ export default function App() {
       <main>
         <Hero />
         <Read />
-        <Waste />
         <Refund />
+        <Waste />
         <Proof onZoom={setZoom} />
         <Views onZoom={setZoom} />
         <Fields />
