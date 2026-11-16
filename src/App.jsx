@@ -257,11 +257,11 @@ function Hero() {
     <section id="top" className="grain relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(800px_600px_at_78%_50%,rgba(255,255,255,.045),transparent_62%),radial-gradient(700px_500px_at_8%_25%,rgba(40,110,170,.14),transparent_60%)]" />
 
-      <div className={wrap + " relative z-10 grid min-h-[100svh] content-center items-center gap-6 pb-20 pt-[96px] sm:gap-14 sm:pb-24 sm:pt-[112px] lg:grid-cols-[1.2fr_0.8fr] lg:content-normal lg:gap-10"}>
+      <div className={wrap + " relative z-10 grid min-h-[100svh] content-center items-center gap-4 pb-12 pt-[78px] sm:gap-14 sm:pb-24 sm:pt-[112px] lg:grid-cols-[1.2fr_0.8fr] lg:content-normal lg:gap-10"}>
         {/* text */}
         <div>
           <h1 aria-label={H.title.map((l) => l.replace(/<[^>]+>/g, "")).join(" ")}
-            className="text-[clamp(29px,4.3vw,62px)] font-extrabold leading-[1.4] tracking-[-0.04em]">
+            className="text-[clamp(25px,4.3vw,62px)] font-extrabold leading-[1.32] tracking-[-0.04em] sm:leading-[1.4]">
             {H.title.map((l, i) => (
               <HeroLine key={i} html={l} start={TITLE_START + i * LINE_GAP} />
             ))}
@@ -270,9 +270,9 @@ function Hero() {
           {/* gold rule draws in after the title lands */}
           <motion.span aria-hidden="true" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
             transition={{ delay: SUB_START - 0.25, duration: 0.7, ease }}
-            className="mt-9 block h-[3px] w-20 origin-left rounded-full bg-gold" />
+            className="mt-5 block h-[3px] w-16 origin-left rounded-full bg-gold sm:mt-9 sm:w-20" />
 
-          <div className="mt-7 text-[clamp(16px,1.6vw,22px)] leading-[1.7]">
+          <div className="mt-4 text-[clamp(15px,1.6vw,22px)] leading-[1.65] sm:mt-7 sm:leading-[1.7]">
             <motion.p initial={{ opacity: 0, y: 14, filter: "blur(6px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               transition={{ delay: SUB_START, duration: 0.7, ease }} className="text-white/80">
               {H.sub[0]}
@@ -290,7 +290,7 @@ function Hero() {
 
         {/* photo card — lives in the same grid as the text, so it never drifts */}
         <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3, duration: 1, ease }}
-          className="relative order-first mx-auto w-full max-w-[74vw] sm:max-w-[460px] lg:order-none lg:max-w-[540px] lg:justify-self-end">
+          className="relative order-first mx-auto w-full max-w-[min(56vw,38svh)] sm:max-w-[460px] lg:order-none lg:max-w-[540px] lg:justify-self-end">
           {/* warm glow behind the artwork */}
           <span className="absolute inset-[14%] rounded-full bg-gold/[0.10] blur-3xl" aria-hidden="true" />
           {/* mood artwork: its black edges dissolve into the page */}
