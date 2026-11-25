@@ -864,6 +864,9 @@ function KakaoModal() {
     const key = (e) => e.key === "Escape" && setOpen(false);
     window.addEventListener("open-kakao", on);
     window.addEventListener("keydown", key);
+    // sokmaum.kr/?kakao (cafe·SNS links) opens the ID window right away
+    const q = new URLSearchParams(window.location.search);
+    if (q.has("kakao") || window.location.hash === "#kakao") setOpen(true);
     return () => { window.removeEventListener("open-kakao", on); window.removeEventListener("keydown", key); };
   }, []);
   const copy = async () => {
