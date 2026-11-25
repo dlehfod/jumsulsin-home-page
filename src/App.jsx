@@ -762,7 +762,7 @@ function Contact() {
   const Z = C.final;
   const [copied, setCopied] = useState(false);
   const copy = async () => {
-    try { await navigator.clipboard.writeText(C.kakaoId); setCopied(true); setTimeout(() => setCopied(false), 1800); } catch { /* ignore */ }
+    if (await copyText(C.kakaoId)) { setCopied(true); setTimeout(() => setCopied(false), 1800); }
   };
   return (
     <section id="contact" className="relative overflow-hidden py-[clamp(79px,13vw,170px)] text-center">
@@ -839,11 +839,19 @@ function FloatingCta() {
   );
 }
 
-/* Kakao consult: phones follow the friend-add link; PCs get a QR window instead */
-const isDesktop = () =>
-  typeof window !== "undefined" && window.matchMedia("(hover: hover) and (pointer: fine)").matches && window.innerWidth >= 768;
+/* copy text: clipboard API first, then the old textarea trick (some phone browsers block the API) */
+async function copyText(s) {
+  try { await navigator.clipboard.writeText(s); return true; } catch { /* fall through */ }
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = s; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, s.length);
+    const ok = document.execCommand("copy"); ta.remove(); return ok;
+  } catch { return false; }
+}
+
+/* Kakao consult: phone and PC both get the Kakao ID window (QR can't be scanned from the same phone) */
 function openKakao(e) {
-  if (!isDesktop()) return; // phone: let the link open KakaoTalk
   e.preventDefault();
   window.dispatchEvent(new CustomEvent("open-kakao"));
 }
@@ -859,7 +867,7 @@ function KakaoModal() {
     return () => { window.removeEventListener("open-kakao", on); window.removeEventListener("keydown", key); };
   }, []);
   const copy = async () => {
-    try { await navigator.clipboard.writeText(C.kakaoId); setCopied(true); setTimeout(() => setCopied(false), 1800); } catch { /* ignore */ }
+    if (await copyText(C.kakaoId)) { setCopied(true); setTimeout(() => setCopied(false), 1800); }
   };
   if (!open) return null;
   return (
@@ -869,13 +877,16 @@ function KakaoModal() {
         className="tone-dark relative w-full max-w-[380px] rounded-[28px] border border-white/10 bg-[#0b1e2d] p-8 text-center shadow-[0_40px_100px_-20px_rgba(0,0,0,.9)]">
         <button type="button" onClick={() => setOpen(false)} className="absolute right-4 top-3 text-3xl leading-none text-white/40 transition hover:text-white" aria-label="닫기">×</button>
         <p className="text-[13px] font-bold tracking-[0.2em] text-gold">카카오톡 상담</p>
-        <p className="mt-3 text-[20px] font-extrabold tracking-tight">폰 카메라로 찍으면<br />바로 친구추가돼요</p>
-        <img src={C.links.kakaoQr} alt="카카오톡 친구추가 QR 코드" className="mx-auto mt-6 w-[220px] rounded-2xl bg-white" />
-        <div className="mt-6 flex items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3">
-          <span className="text-[13px] text-white/45">카카오톡 ID</span>
-          <span className="text-[18px] font-extrabold">{C.kakaoId}</span>
-          <button type="button" onClick={copy} className="rounded-full border border-white/15 px-3 py-1 text-[12px] font-bold text-white/70 transition hover:border-white/40 hover:text-white">{copied ? "복사됨" : "복사"}</button>
+        <p className="mt-3 text-[20px] font-extrabold tracking-tight">카카오톡 ID로<br />친구 추가해주세요</p>
+        <div className="mt-7 rounded-2xl border border-gold/40 bg-white/[0.03] px-4 py-6">
+          <p className="text-[12px] font-semibold tracking-[0.2em] text-white/45">KAKAOTALK ID</p>
+          <p className="mt-2 text-[32px] font-extrabold tracking-[0.01em] text-gold">{C.kakaoId}</p>
         </div>
+        <button type="button" onClick={copy}
+          className="mt-4 h-12 w-full rounded-full bg-gold text-[15px] font-bold text-ink transition hover:brightness-110">
+          {copied ? "복사됐어요 ✓" : "ID 복사하기"}
+        </button>
+        <p className="mt-5 text-[13px] leading-relaxed text-white/50">카카오톡 → 친구 추가 → ID로 추가<br />→ 붙여넣기 하면 돼요</p>
       </motion.div>
     </div>
   );
