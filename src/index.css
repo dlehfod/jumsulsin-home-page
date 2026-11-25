@@ -87,3 +87,12 @@ em { font-style: normal; color: var(--color-gold); }
   .marquee, .floaty, .spin-slow { animation: none; }
   html { scroll-behavior: auto; }
 }
+
+/* "증명" — 첫 화면과 환불제 제목에서 금색 밑줄로 강조 */
+.proof-u {
+  text-decoration: underline;
+  text-decoration-color: var(--color-gold);
+  text-decoration-thickness: 0.12em;
+  text-underline-offset: 0.2em;
+  text-decoration-skip-ink: none;
+}

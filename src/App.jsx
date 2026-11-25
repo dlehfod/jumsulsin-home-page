@@ -208,10 +208,10 @@ function Header() {
 }
 
 /* ---------- 1. hero ---------- */
-const TITLE_START = 0.25;   // 첫 줄 시작 (초)
+const TITLE_START = 0.6;    // 제목 첫 줄 시작 (초) — 위 질문이 먼저 보인 뒤
 const LINE_GAP = 0.38;      // 줄 사이 간격
 const CHAR_GAP = 0.035;     // 글자 사이 간격
-const SUB_START = 1.85;     // 환불 문장 시작
+const SUB_START = 1.75;     // '증명 해보겠습니다' 문장 시작
 
 /* splits "<em>a</em> b" into segments, then words, then letters.
    Words stay unbreakable so Korean line wrapping still works on phones. */
@@ -260,8 +260,14 @@ function Hero() {
       <div className={wrap + " relative z-10 grid min-h-[100svh] content-center items-center gap-4 pb-12 pt-[78px] sm:gap-14 sm:pb-24 sm:pt-[112px] lg:grid-cols-[1.2fr_0.8fr] lg:content-normal lg:gap-10"}>
         {/* text */}
         <div>
+          {/* the reader's worry first, quiet and small */}
+          <motion.p {...fade(0.15)}
+            className="mb-5 border-l-[3px] border-gold/60 pl-4 text-[clamp(15px,1.75vw,23px)] font-medium leading-[1.6] tracking-[-0.02em] text-white/60 sm:mb-8 sm:pl-5">
+            {H.question.map((l, i) => <span key={i} className="block">{l}</span>)}
+          </motion.p>
+
           <h1 aria-label={H.title.map((l) => l.replace(/<[^>]+>/g, "")).join(" ")}
-            className="text-[clamp(25px,4.3vw,62px)] font-extrabold leading-[1.32] tracking-[-0.04em] sm:leading-[1.4]">
+            className="text-[clamp(32px,5.4vw,76px)] font-extrabold leading-[1.25] tracking-[-0.045em] sm:leading-[1.3]">
             {H.title.map((l, i) => (
               <HeroLine key={i} html={l} start={TITLE_START + i * LINE_GAP} />
             ))}
@@ -270,22 +276,17 @@ function Hero() {
           {/* gold rule draws in after the title lands */}
           <motion.span aria-hidden="true" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
             transition={{ delay: SUB_START - 0.25, duration: 0.7, ease }}
-            className="mt-5 block h-[3px] w-16 origin-left rounded-full bg-gold sm:mt-9 sm:w-20" />
+            className="mt-5 block h-[3px] w-16 origin-left rounded-full bg-gold sm:mt-8 sm:w-20" />
 
-          <div className="mt-4 text-[clamp(15px,1.6vw,22px)] leading-[1.65] sm:mt-7 sm:leading-[1.7]">
-            <motion.p initial={{ opacity: 0, y: 14, filter: "blur(6px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              transition={{ delay: SUB_START, duration: 0.7, ease }} className="text-white/80">
-              {H.sub[0]}
-            </motion.p>
-            <motion.p initial={{ opacity: 0, y: 14, filter: "blur(6px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              transition={{ delay: SUB_START + 0.45, duration: 0.7, ease }} className="font-bold text-white">
-              {H.sub[1]}
-              {/* refund words: red, fades in a beat later */}
-              <motion.span initial={{ color: "#0b1e2d" }} animate={{ color: "#c0392b" }}
-                transition={{ delay: SUB_START + 0.95, duration: 0.6 }}
-                className="font-extrabold">{H.subMark}</motion.span>
-            </motion.p>
-          </div>
+          <motion.p initial={{ opacity: 0, y: 14, filter: "blur(6px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ delay: SUB_START, duration: 0.7, ease }}
+            className="mt-4 text-[clamp(17px,1.9vw,26px)] font-bold leading-[1.6] tracking-[-0.02em] text-white sm:mt-7">
+            {H.sub[0]}
+            {/* the promise words: gold, a beat later */}
+            <motion.span initial={{ color: "#0b1e2d" }} animate={{ color: "#9a6a0c" }}
+              transition={{ delay: SUB_START + 0.5, duration: 0.6 }}
+              className="whitespace-nowrap font-extrabold" dangerouslySetInnerHTML={{ __html: H.subMark }} />
+          </motion.p>
         </div>
 
         {/* photo card — lives in the same grid as the text, so it never drifts */}
@@ -528,19 +529,19 @@ function Waste() {
 /* ---------- 4. refund ---------- */
 function Refund() {
   const R = C.refund;
-  const [seen, setSeen] = useState(false);   // starts the gold highlight once the answer is on screen
   return (
     <section id="refund" className="bg-navy py-[clamp(72px,12vw,160px)]">
       <div className={wrap + " text-center"}>
         <Reveal>
-          <div className="mb-9 flex flex-col items-center">
-            <span className="pl-[0.4em] text-[clamp(15px,1.7vw,21px)] font-bold tracking-[0.4em] text-gold">{R.label}</span>
-            <span className="mt-4 h-px w-10 bg-gold/70" aria-hidden="true" />
-          </div>
           <H2 lines={R.title} />
+          {/* the promise that backs the process */}
+          <p className="mt-7 inline-flex items-center gap-2.5 rounded-full border border-bad/40 bg-bad/[0.08] px-5 py-2.5 text-[clamp(15px,1.6vw,19px)] font-semibold text-white/85 sm:mt-9">
+            <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-bad text-[11px] font-black text-[#0b1e2d]" aria-hidden="true">✓</span>
+            <span>{R.promise}<b className="font-extrabold text-bad">{R.promiseMark}</b></span>
+          </p>
         </Reveal>
-        {/* two equal steps in soft boxes, joined by a thin line */}
-        <Reveal className="mx-auto mt-14 max-w-[640px] sm:mt-16">
+        {/* two steps in soft boxes, joined by a thin line */}
+        <Reveal className="mx-auto mt-14 max-w-[640px] sm:mt-20">
           {R.steps.map((st, i) => (
             <div key={st.n}>
               {i > 0 && (
@@ -548,48 +549,30 @@ function Refund() {
                   <span className="h-10 w-px bg-linear-to-b from-white/15 to-gold/50 sm:h-12" />
                 </div>
               )}
+              {(() => {
+                const last = !!st.hi;   // the refund step (hi in copy.js): the promise, set louder
+                return (
               <div className={"relative rounded-2xl border px-5 pb-8 pt-9 text-center sm:px-10 sm:pb-10 sm:pt-11 " +
-                (i === R.steps.length - 1 ? "border-gold/25 bg-gold/[0.035]" : "border-white/10 bg-white/[0.025]")}>
+                (last ? "border-gold/60 bg-[linear-gradient(180deg,rgba(224,176,74,.12),rgba(224,176,74,.03))] shadow-[0_0_50px_-18px_rgba(224,176,74,.55)]"
+                      : "border-white/10 bg-white/[0.025]")}>
                 <span className={"absolute left-1/2 top-0 grid h-8 w-8 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border bg-navy text-[11px] font-bold " +
-                  (i === R.steps.length - 1 ? "border-gold/50 text-gold" : "border-white/20 text-white/70")}>{st.n}</span>
+                  (last ? "border-gold text-gold" : "border-white/20 text-white/70")}>{st.n}</span>
                 {/* lighter two-level type so the steps read differently from the heavy H2 above */}
-                <p className="text-[clamp(14px,1.5vw,17px)] font-medium tracking-[-0.01em] text-white/55"
+                <p className={last ? "text-[clamp(16px,1.8vw,20px)] font-semibold tracking-[-0.01em] text-white/85"
+                                   : "text-[clamp(14px,1.5vw,17px)] font-medium tracking-[-0.01em] text-white/55"}
                   dangerouslySetInnerHTML={{ __html: st.lines[0] }} />
-                <p className="mt-2 text-[clamp(20px,2.6vw,28px)] font-semibold leading-[1.35] tracking-[-0.02em] text-white/90 [&_em]:font-bold"
+                <p className={last ? "mt-2 text-[clamp(28px,3.8vw,42px)] font-extrabold leading-[1.25] tracking-[-0.035em] text-white [&_em]:bg-[linear-gradient(transparent_62%,rgba(224,176,74,.25)_62%)] [&_em]:px-1"
+                                   : "mt-2 text-[clamp(20px,2.6vw,28px)] font-semibold leading-[1.35] tracking-[-0.02em] text-white/90 [&_em]:font-bold"}
                   dangerouslySetInnerHTML={{ __html: st.lines[1] }} />
-                {st.note && <p className="mt-1 text-[12px] text-white/40 sm:text-[13px]">{st.note}</p>}
+                {st.note && <p className={last ? "mt-2 text-[13px] font-semibold tracking-[0.02em] text-gold/90 sm:text-[14px]"
+                                               : "mt-1 text-[12px] text-white/40 sm:text-[13px]"}>{st.note}</p>}
               </div>
+                );
+              })()}
             </div>
           ))}
         </Reveal>
 
-        {/* closing promise: a gold-framed seal. the worry fades in small, a gold line draws,
-            then the answer lands large in serif with a gold highlight sweeping under it */}
-        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.8, ease }}
-          className="relative mx-auto mt-24 max-w-[760px] sm:mt-32">
-          {/* soft gold glow behind the frame */}
-          <span className="absolute inset-x-[10%] inset-y-[20%] rounded-full bg-gold/15 blur-3xl" aria-hidden="true" />
-          <div className="relative rounded-[28px] border border-gold/45 bg-[linear-gradient(180deg,rgba(224,176,74,.10),rgba(224,176,74,.02))] px-6 pb-12 pt-14 shadow-[inset_0_0_0_6px_rgba(11,30,45,1),inset_0_0_0_7px_rgba(224,176,74,.18)] sm:px-14 sm:pb-16 sm:pt-16">
-            {/* seal on the top edge */}
-            <span className="absolute left-1/2 top-0 grid h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-gold text-[20px] font-black text-[#0b1e2d] shadow-[0_0_0_6px_#0b1e2d,0_10px_30px_-6px_rgba(224,176,74,.6)]" aria-hidden="true">✓</span>
-
-            <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: "-80px" }} transition={{ delay: 0.1, duration: 0.5 }}
-              className="text-[clamp(15px,1.8vw,20px)] font-medium tracking-[-0.01em] text-white/55">{R.footer[0]}</motion.p>
-
-            <motion.span initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }}
-              viewport={{ once: true, margin: "-80px" }} transition={{ delay: 0.3, duration: 0.5, ease }}
-              className="mx-auto my-6 block h-px w-16 origin-center bg-gold sm:my-7" aria-hidden="true" />
-
-            <motion.p initial={{ opacity: 0, y: 16, filter: "blur(6px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              viewport={{ once: true, margin: "-80px" }} transition={{ delay: 0.45, duration: 0.55, ease }}
-              onViewportEnter={() => setSeen(true)}
-              className={"font-['Noto_Serif_KR',serif] text-[clamp(30px,4.8vw,56px)] font-bold leading-[1.3] tracking-[-0.03em] text-white " +
-                "[&_em]:bg-[linear-gradient(transparent_64%,rgba(224,176,74,.32)_64%)] [&_em]:bg-no-repeat [&_em]:px-1 [&_em]:[background-size:0%_100%] mark-sweep-host " + (seen ? "[&_em]:[animation:mark-sweep_.6s_.75s_ease_forwards]" : "")}
-              dangerouslySetInnerHTML={{ __html: R.footer[1] }} />
-          </div>
-        </motion.div>
       </div>
     </section>
   );
@@ -922,9 +905,9 @@ export default function App() {
         <Hero />
         <Read />
         <Refund />
+        <Views onZoom={setZoom} />
         <Waste />
         <Proof onZoom={setZoom} />
-        <Views onZoom={setZoom} />
         <Fields />
         <Compare />
         <Versus />
