@@ -14,10 +14,44 @@
   --font-sans: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
 }
 
+/* ---------- 2026-11-25 새 색감: 아이보리 + 남색 + 금색 ----------
+   배치·문구는 그대로. 색 변수만 바꿈.
+   밝은 구역(기본): 'white' 변수가 남색 글자로, 'ink' 변수가 아이보리로 뒤집힘
+   → text-white/70 같은 기존 클래스가 그대로 남색 70%로 보임.
+   어두운 구역(bg-navy, bg-black 섹션, .tone-dark): 원래처럼 흰 글자.
+   되돌리려면 이 블록과 아래 .tone-dark 블록을 지우면 됨. */
+:root {
+  --ivory: #f5efe3;
+  --ivory-2: #ebe2d0;
+  --navy: #0b1e2d;
+  --color-white: #0b1e2d;
+  --color-ink: #f5efe3;
+  --color-navy: #0b1e2d;
+  --color-navy-2: #10263a;
+  --color-panel: #ebe2d0;
+  --color-line: rgba(11, 30, 45, 0.12);
+  --color-mute: #5b6670;
+  --color-gold: #9a6a0c;
+  --color-gold-2: #b07b12;
+  --color-bad: #b4473a;
+}
+section.bg-navy, section.bg-black, .tone-dark {
+  --color-white: #ffffff;
+  --color-ink: #0b1e2d;
+  --color-panel: #13293b;
+  --color-line: rgba(255, 255, 255, 0.1);
+  --color-mute: #9aa9b8;
+  --color-gold: #e0b04a;
+  --color-gold-2: #f0c66a;
+  --color-bad: #ff7b7b;
+  color: #fff;
+}
+section.bg-black { background: var(--navy); }
+
 html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 body {
-  background: var(--color-ink);
-  color: #fff;
+  background: var(--ivory);
+  color: var(--navy);
   font-family: var(--font-sans);
   word-break: keep-all;
   overflow-x: hidden;
@@ -45,7 +79,11 @@ em { font-style: normal; color: var(--color-gold); }
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }
 
+/* gold highlight that sweeps under the refund section's closing answer */
+@keyframes mark-sweep { to { background-size: 100% 100%; } }
+
 @media (prefers-reduced-motion: reduce) {
+  .mark-sweep-host em { animation: none !important; background-size: 100% 100% !important; }
   .marquee, .floaty, .spin-slow { animation: none; }
   html { scroll-behavior: auto; }
 }

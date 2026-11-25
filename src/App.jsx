@@ -170,7 +170,7 @@ function Header() {
           <img src={C.logoImg} alt="" width="40" height="40"
             className="h-9 w-9 shrink-0 rounded-full ring-1 ring-gold/40 transition-transform duration-500 group-hover:scale-105 sm:h-10 sm:w-10" />
           <span className="text-[15px] font-extrabold tracking-[-0.03em] text-white sm:text-[18px]"
-            dangerouslySetInnerHTML={{ __html: C.logo.replace("마음을", '<span class="text-gold">마음을</span>') }} />
+            dangerouslySetInnerHTML={{ __html: C.logo.replace("100%", '<span class="text-gold">100%</span>') }} />
         </a>
         <nav className="hidden items-center gap-9 text-[15px] font-medium text-white/60 md:flex lg:gap-11">
           {C.nav.map((n) => (
@@ -281,7 +281,7 @@ function Hero() {
               transition={{ delay: SUB_START + 0.45, duration: 0.7, ease }} className="font-bold text-white">
               {H.sub[1]}
               {/* refund words: red, fades in a beat later */}
-              <motion.span initial={{ color: "#ffffff" }} animate={{ color: "#ff5c5c" }}
+              <motion.span initial={{ color: "#0b1e2d" }} animate={{ color: "#c0392b" }}
                 transition={{ delay: SUB_START + 0.95, duration: 0.6 }}
                 className="font-extrabold">{H.subMark}</motion.span>
             </motion.p>
@@ -322,9 +322,8 @@ function EvidenceCard({ kind, img, onZoom, caption, sub }) {
             <span className="ml-3 flex-1 truncate rounded-md bg-white px-3 py-1 text-xs text-[#667]">cafe.naver.com · 상담후기 게시판</span>
           </span>
         )}
-        <span className="relative block h-[clamp(320px,34vw,460px)] overflow-hidden">
-          <img src={img} alt={caption} loading="lazy" className="w-full object-cover object-top transition duration-700 group-hover:scale-[1.02]" />
-          <span className="absolute inset-x-0 bottom-0 h-28 bg-linear-to-t from-white via-white/80 to-transparent" />
+        <span className="relative block overflow-hidden">
+          <img src={img} alt={caption} loading="lazy" className="block h-auto w-full transition duration-700 group-hover:scale-[1.02]" />
           <span className="absolute bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-ink/85 px-4 py-2 text-[13px] font-bold text-white">원본 크게 보기 ⤢</span>
         </span>
       </button>
@@ -416,9 +415,9 @@ function Views({ onZoom }) {
       <Reveal delay={0.1} className="mt-16">
         <DragMarquee items={K.items} render={(k, i) => (
           <button key={i} type="button" onClick={() => onZoom(k.img)}
-            className="group w-[230px] shrink-0 overflow-hidden rounded-[22px] bg-panel text-left ring-1 ring-white/10 transition hover:-translate-y-1.5 sm:w-[270px]">
-            <span className="block aspect-[9/13] overflow-hidden">
-              <img src={k.img} alt={k.quote} loading="lazy" draggable={false} className="pointer-events-none h-full w-full object-cover object-top transition duration-500 group-hover:scale-105" />
+            className="group w-[230px] shrink-0 self-start overflow-hidden rounded-[22px] bg-panel text-left ring-1 ring-white/10 transition hover:-translate-y-1.5 sm:w-[270px]">
+            <span className="block overflow-hidden">
+              <img src={k.img} alt={k.quote} loading="lazy" draggable={false} className="pointer-events-none block h-auto w-full transition duration-500 group-hover:scale-[1.02]" />
             </span>
           </button>
         )} />
@@ -439,31 +438,31 @@ function MindMap({ labels, active }) {
   });
   return (
     <svg viewBox="0 0 400 400" className="h-auto w-full" role="img" aria-label="상대의 속마음을 둘러싼 여섯 가지 마음">
-      <circle cx={cx} cy={cy} r="188" fill="none" stroke="rgba(255,255,255,.06)" />
+      <circle cx={cx} cy={cy} r="188" fill="none" stroke="rgba(11,30,45,.08)" />
       <g className="spin-slow">
-        <circle cx={cx} cy={cy} r={R} fill="none" stroke="rgba(255,197,61,.28)" strokeDasharray="2 7" />
+        <circle cx={cx} cy={cy} r={R} fill="none" stroke="rgba(154,106,12,.4)" strokeDasharray="2 7" />
       </g>
-      <circle cx={cx} cy={cy} r="112" fill="none" stroke="rgba(255,255,255,.05)" />
+      <circle cx={cx} cy={cy} r="112" fill="none" stroke="rgba(11,30,45,.06)" />
 
       {nodes.map((n, i) => (
         <line key={"l" + i} x1={n.lx} y1={n.ly} x2={n.x} y2={n.y}
-          stroke={active === i ? "rgba(255,197,61,.8)" : "rgba(255,255,255,.1)"} strokeWidth={active === i ? 1.5 : 1}
+          stroke={active === i ? "rgba(154,106,12,.8)" : "rgba(11,30,45,.14)"} strokeWidth={active === i ? 1.5 : 1}
           style={{ transition: "stroke .2s" }} />
       ))}
 
-      <circle cx={cx} cy={cy} r={inner} fill="rgba(255,197,61,.06)" stroke="rgba(255,197,61,.35)" />
-      <text x={cx} y={cy - 8} textAnchor="middle" fill="rgba(255,255,255,.55)" fontSize="13" fontWeight="600">그 사람의</text>
-      <text x={cx} y={cy + 18} textAnchor="middle" fill="#fff" fontSize="23" fontWeight="800">속마음</text>
+      <circle cx={cx} cy={cy} r={inner} fill="rgba(154,106,12,.07)" stroke="rgba(154,106,12,.4)" />
+      <text x={cx} y={cy - 8} textAnchor="middle" fill="rgba(11,30,45,.55)" fontSize="13" fontWeight="600">그 사람의</text>
+      <text x={cx} y={cy + 18} textAnchor="middle" fill="#0b1e2d" fontSize="23" fontWeight="800">속마음</text>
 
       {nodes.map((n, i) => {
         const on = active === i;
         return (
           <g key={"n" + i}>
-            <circle cx={n.x} cy={n.y} r="40" fill="rgba(255,197,61,.16)" style={{ opacity: on ? 1 : 0, transition: "opacity .2s" }} />
-            <circle cx={n.x} cy={n.y} r="31" fill={on ? "#ffc53d" : "#0f2233"} stroke={on ? "#ffc53d" : "rgba(255,255,255,.18)"}
+            <circle cx={n.x} cy={n.y} r="40" fill="rgba(154,106,12,.16)" style={{ opacity: on ? 1 : 0, transition: "opacity .2s" }} />
+            <circle cx={n.x} cy={n.y} r="31" fill={on ? "#9a6a0c" : "#ffffff"} stroke={on ? "#9a6a0c" : "rgba(11,30,45,.2)"}
               style={{ transition: "fill .2s, stroke .2s" }} />
             <text x={n.x} y={n.y + 4.5} textAnchor="middle" fontSize={labels[i].length > 3 ? 11.5 : 13} fontWeight="800" letterSpacing="-0.3"
-              fill={on ? "#05080f" : "rgba(255,255,255,.7)"} style={{ transition: "fill .2s" }}>
+              fill={on ? "#ffffff" : "rgba(11,30,45,.78)"} style={{ transition: "fill .2s" }}>
               {labels[i]}
             </text>
           </g>
@@ -529,6 +528,7 @@ function Waste() {
 /* ---------- 4. refund ---------- */
 function Refund() {
   const R = C.refund;
+  const [seen, setSeen] = useState(false);   // starts the gold highlight once the answer is on screen
   return (
     <section id="refund" className="bg-navy py-[clamp(72px,12vw,160px)]">
       <div className={wrap + " text-center"}>
@@ -557,22 +557,39 @@ function Refund() {
                   dangerouslySetInnerHTML={{ __html: st.lines[0] }} />
                 <p className="mt-2 text-[clamp(20px,2.6vw,28px)] font-semibold leading-[1.35] tracking-[-0.02em] text-white/90 [&_em]:font-bold"
                   dangerouslySetInnerHTML={{ __html: st.lines[1] }} />
-                {st.note && <p className="mt-3 text-[12px] text-white/40 sm:text-[13px]">{st.note}</p>}
+                {st.note && <p className="mt-1 text-[12px] text-white/40 sm:text-[13px]">{st.note}</p>}
               </div>
             </div>
           ))}
         </Reveal>
 
-        {/* the worry as a quiet question, then a calm answer */}
-        <div className="mx-auto mt-20 max-w-[960px] sm:mt-32">
-          <motion.p initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }} transition={{ duration: 0.7, ease }}
-            className="text-[clamp(16px,2vw,22px)] font-medium tracking-[-0.01em] text-white/55">{R.footer[0]}</motion.p>
-          <motion.p initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }} transition={{ delay: 0.6, duration: 0.8, ease }}
-            className="mt-4 sm:mt-5 text-[clamp(26px,3.8vw,46px)] font-semibold leading-[1.3] tracking-[-0.025em] text-white/90"
-            dangerouslySetInnerHTML={{ __html: R.footer[1] }} />
-        </div>
+        {/* closing promise: a gold-framed seal. the worry fades in small, a gold line draws,
+            then the answer lands large in serif with a gold highlight sweeping under it */}
+        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.8, ease }}
+          className="relative mx-auto mt-24 max-w-[760px] sm:mt-32">
+          {/* soft gold glow behind the frame */}
+          <span className="absolute inset-x-[10%] inset-y-[20%] rounded-full bg-gold/15 blur-3xl" aria-hidden="true" />
+          <div className="relative rounded-[28px] border border-gold/45 bg-[linear-gradient(180deg,rgba(224,176,74,.10),rgba(224,176,74,.02))] px-6 pb-12 pt-14 shadow-[inset_0_0_0_6px_rgba(11,30,45,1),inset_0_0_0_7px_rgba(224,176,74,.18)] sm:px-14 sm:pb-16 sm:pt-16">
+            {/* seal on the top edge */}
+            <span className="absolute left-1/2 top-0 grid h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-gold text-[20px] font-black text-[#0b1e2d] shadow-[0_0_0_6px_#0b1e2d,0_10px_30px_-6px_rgba(224,176,74,.6)]" aria-hidden="true">✓</span>
+
+            <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
+              viewport={{ once: true, margin: "-80px" }} transition={{ delay: 0.1, duration: 0.5 }}
+              className="text-[clamp(15px,1.8vw,20px)] font-medium tracking-[-0.01em] text-white/55">{R.footer[0]}</motion.p>
+
+            <motion.span initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }}
+              viewport={{ once: true, margin: "-80px" }} transition={{ delay: 0.3, duration: 0.5, ease }}
+              className="mx-auto my-6 block h-px w-16 origin-center bg-gold sm:my-7" aria-hidden="true" />
+
+            <motion.p initial={{ opacity: 0, y: 16, filter: "blur(6px)" }} whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              viewport={{ once: true, margin: "-80px" }} transition={{ delay: 0.45, duration: 0.55, ease }}
+              onViewportEnter={() => setSeen(true)}
+              className={"font-['Noto_Serif_KR',serif] text-[clamp(30px,4.8vw,56px)] font-bold leading-[1.3] tracking-[-0.03em] text-white " +
+                "[&_em]:bg-[linear-gradient(transparent_64%,rgba(224,176,74,.32)_64%)] [&_em]:bg-no-repeat [&_em]:px-1 [&_em]:[background-size:0%_100%] mark-sweep-host " + (seen ? "[&_em]:[animation:mark-sweep_.6s_.75s_ease_forwards]" : "")}
+              dangerouslySetInnerHTML={{ __html: R.footer[1] }} />
+          </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -641,7 +658,7 @@ function Compare() {
             </div>
           </Reveal>
           <Reveal delay={0.1}>
-            <div className="h-full rounded-2xl border border-gold/50 bg-[linear-gradient(160deg,rgba(255,197,61,.13),rgba(15,34,51,.9)_55%)] px-5 py-5 shadow-[0_0_70px_-30px_rgba(255,197,61,.45)] sm:px-7 sm:py-6">
+            <div className="tone-dark h-full rounded-2xl border border-gold/50 bg-[linear-gradient(160deg,#3a3524,#0b1e2d_55%)] px-5 py-5 shadow-[0_0_70px_-30px_rgba(255,197,61,.45)] sm:px-7 sm:py-6">
               <h3 className="flex items-center gap-2 border-b border-gold/25 pb-3 text-[15px] font-extrabold text-gold sm:text-[16px]">{P.mineName}</h3>
               <ul>{P.mine.map((t) => (
                 <li key={t} className="flex items-center gap-3 border-b border-white/10 py-3 text-[clamp(14px,1.35vw,17px)] font-bold last:border-0 last:pb-0">
@@ -686,7 +703,7 @@ function Versus() {
 function Profile() {
   const P = C.profile;
   return (
-    <section id="profile" className="light bg-[#f3eee5] py-[clamp(72px,12vw,160px)] text-[#14131c]">
+    <section id="profile" className="light bg-[#ebe2d0] py-[clamp(72px,12vw,160px)] text-[#14131c]">
       <div className={wrap + " grid items-center gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20"}>
         <Reveal>
           <div className="relative mx-auto max-w-[460px]">
@@ -716,7 +733,7 @@ function Profile() {
             <div className="mt-12 flex flex-col gap-2.5">
               {[{ href: L.mission, t: P.cta }, { href: L.damage, t: P.cta2 }].map((r) => (
                 <a key={r.t} href={r.href} target="_blank" rel="noopener"
-                  className="group flex h-[68px] items-center justify-between gap-4 rounded-2xl bg-[#14131c] pl-5 pr-3 text-white transition duration-300 hover:bg-black sm:pl-7">
+                  className="tone-dark group flex h-[68px] items-center justify-between gap-4 rounded-2xl bg-[#0b1e2d] pl-5 pr-3 text-white transition duration-300 hover:bg-black sm:pl-7">
                   <span className="flex min-w-0 items-center gap-4">
                     <span className="hidden shrink-0 text-[12px] font-bold tracking-[0.18em] text-gold/80 sm:inline">읽어보기</span>
                     <span className="hidden h-4 w-px shrink-0 bg-white/15 sm:inline-block" aria-hidden="true" />
@@ -833,7 +850,7 @@ function FloatingCta() {
       className={`fixed bottom-4 right-4 z-40 flex h-9 items-center gap-1.5 rounded-full border border-white/10 bg-ink/85 pl-[5px] pr-3 text-[11px] font-semibold text-white/90 shadow-[0_12px_32px_-8px_rgba(0,0,0,.8)] backdrop-blur-xl transition duration-500 hover:border-white/30 hover:text-white sm:bottom-6 sm:right-6 sm:h-10 sm:pr-4 sm:text-[12px] ${
         show ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-6 opacity-0"
       }`}>
-      <span className="grid h-[26px] w-[26px] place-items-center rounded-full bg-kakao text-[7px] font-black text-ink sm:h-[29px] sm:w-[29px] sm:text-[7.5px]" aria-hidden="true">TALK</span>
+      <span className="grid h-[26px] w-[26px] place-items-center rounded-full bg-kakao text-[7px] font-black text-[#191919] sm:h-[29px] sm:w-[29px] sm:text-[7.5px]" aria-hidden="true">TALK</span>
       {C.mobileBar}
     </a>
   );
@@ -866,7 +883,7 @@ function KakaoModal() {
     <div className="fixed inset-0 z-[110] grid place-items-center bg-black/75 p-5 backdrop-blur-sm" onClick={() => setOpen(false)} role="dialog" aria-modal="true" aria-label="카카오톡 상담 문의">
       <motion.div initial={{ opacity: 0, y: 16, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.35, ease }}
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-[380px] rounded-[28px] border border-white/10 bg-[#0d1726] p-8 text-center shadow-[0_40px_100px_-20px_rgba(0,0,0,.9)]">
+        className="tone-dark relative w-full max-w-[380px] rounded-[28px] border border-white/10 bg-[#0b1e2d] p-8 text-center shadow-[0_40px_100px_-20px_rgba(0,0,0,.9)]">
         <button type="button" onClick={() => setOpen(false)} className="absolute right-4 top-3 text-3xl leading-none text-white/40 transition hover:text-white" aria-label="닫기">×</button>
         <p className="text-[13px] font-bold tracking-[0.2em] text-gold">카카오톡 상담</p>
         <p className="mt-3 text-[20px] font-extrabold tracking-tight">폰 카메라로 찍으면<br />바로 친구추가돼요</p>
@@ -889,7 +906,7 @@ function Lightbox({ src, onClose }) {
   }, [onClose]);
   if (!src) return null;
   return (
-    <div className="fixed inset-0 z-[100] grid place-items-center bg-black/90 p-5" onClick={onClose} role="dialog" aria-modal="true">
+    <div className="tone-dark fixed inset-0 z-[100] grid place-items-center bg-black/90 p-5" onClick={onClose} role="dialog" aria-modal="true">
       <img src={src} alt="" className="max-h-[92vh] max-w-[94vw] rounded-xl" />
       <button type="button" className="absolute right-5 top-4 text-4xl text-white" aria-label="닫기">×</button>
     </div>
